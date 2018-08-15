@@ -1,5 +1,6 @@
 import React, {Component } from 'react'
 import Map from './mapa';
+// import Side from './side'
 
 
 class Mapaj extends Component {
@@ -18,17 +19,19 @@ class Mapaj extends Component {
       }
     });
   };
+  
     render()  {
       const { markerPosition } = this.state;
       return (
         <div>
           <Map markerPosition={markerPosition} />
-          <div>Current markerPosition: lat: {markerPosition.lat}, lng: {markerPosition.lng}</div>
+          {/* <div>Current markerPosition: lat: {markerPosition.lat}, lng: {markerPosition.lng}</div>
           <button
             onClick={this.moveMarker}
           >
             Move marker
-          </button>
+          </button> */}
+          
         </div>
       );
     }
