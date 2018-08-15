@@ -1,7 +1,7 @@
-#Visualización de estado de esatciones Base 
-##Fase 1 del pryecto
+# Visualización de estado de estaciones Base 
+## Fase 1 del proyecto
 
-###Unicamente desarrollo Front-End (En espera de Back-End)
+### Unicamente desarrollo Front-End (En espera de Back-End)
 
 para iniciar
 
