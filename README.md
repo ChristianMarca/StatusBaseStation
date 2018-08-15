@@ -1,5 +1,9 @@
-# Plataforma para Visualización de Estado de Estaciones Base
-## Parte 1 de la plataforma de manejo de interrupciones de la Telefonia Móvil Avanzada.
 
-Para iniciar
-``` npm install```
+# Visualización de estado de estaciones Base 
+## Fase 1 del proyecto
+
+### Unicamente desarrollo Front-End (En espera de Back-End)
+
+para iniciar
+
+```npm install```
