@@ -2,15 +2,48 @@ import React from "react";
 import L from "leaflet";
 import  'leaflet.gridlayer.googlemutant';
 import 'leaflet.locatecontrol';
-import 'leaflet.fullscreen';
+// import 'leaflet.fullscreen';
 import 'tachyons'
 import '../../plugins/leaflet-sidebar';
 import '../../plugins/leaflet-sidebar/src/L.Control.Sidebar.css';
 import {Side,SideMenu} from './side';
-// import {SideMenu} from './side';
+import '../../plugins/menu';
+import '../../plugins/menu/style.css'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //Para revisar
 //import { PruneCluster, PruneClusterForLeaflet,leafletMap } from 'exports-loader?PruneCluster,PruneClusterForLeaflet!prunecluster/dist/PruneCluster.js'
 import './map.css'
+
+// library.add(search)
+
+var yourObject = {
+  address: "92101 S Martin Ave.",
+  address2: "",
+  agent_name: "mr smith",
+  animal: "sheep",
+  car: "honda",
+  city: "Chicago",
+  county: "Cook County",
+  ID: "1",
+  latitude: "41.718986",
+  longitude: "-87.550646",
+  postalcode: "60617",
+  stateProvince: "IL",
+  status: "GS"
+};
+
+function getInfoFrom(object) {
+  var popupFood = [];
+  for (var key in object) {
+    if (object.hasOwnProperty(key)) {
+      var stringLine = "The " + key + " is " + object[key];
+      popupFood.push(stringLine);
+    }
+  }
+  return popupFood;
+}
+
+var yourData = getInfoFrom(yourObject).join(" <br>");
 
 class Map extends React.Component {
   constructor(){
@@ -29,6 +62,15 @@ class Map extends React.Component {
 
     this.map.addControl(sidebar);
     return sidebar;
+  }
+  generate_button=(position)=>{
+    var menu_button = L.menu_button({
+      position,
+      strings: {
+        title: "Search Menu"
+      }
+    });
+    return menu_button;
   }
 
   componentDidMount() {
@@ -64,27 +106,48 @@ class Map extends React.Component {
     }).addTo(this.map);
     console.log(lc)
 
-    // detect fullscreen toggling
-    this.map.on('enterFullscreen', function(){
-      if(window.console) window.console.log('enterFullscreen');
-        });
-    this.map.on('exitFullscreen', function(){
-      if(window.console) window.console.log('exitFullscreen');
-    });
+    // // detect fullscreen toggling
+    // this.map.on('enterFullscreen', function(){
+    //   if(window.console) window.console.log('enterFullscreen');
+    //     });
+    // this.map.on('exitFullscreen', function(){
+    //   if(window.console) window.console.log('exitFullscreen');
+    // });
 
     const sidebar=this.generate_sidebar('sidebar','right');
     const sidebar_menu=this.generate_sidebar('sidebar_menu','left');
 
-    setTimeout(function () {
-      sidebar.show();
-    }, 500);
+    // setTimeout(function () {
+    //   sidebar.show();
+    // }, 500);
     setTimeout(function () {
       sidebar_menu.show();
-    }, 5000);
+    }, 50);
+
+    setTimeout(function () {
+      sidebar_menu.hide();
+    }, 1000);
     var marker = L.marker([-2.19, -79.4]).addTo(this.map).on('click', function () {
       sidebar.toggle();
-    });
-    console.log(marker)
+    })
+    marker.on('mouseover',()=>{
+      marker.bindPopup(yourData)
+      .openPopup();
+    })
+    marker.on('mouseout ',()=>{
+      marker.closePopup();
+      
+    })
+
+    // var popup = L.popup()
+    // .setLatLng([51.5, -0.09])
+    // .setContent("I am a standalone popup.")
+    // .openOn(this.map);
+
+    // L.marker([-2.191, -79.42]).addTo(this.map)
+    //   .bindPopup(yourData)
+    //   .openPopup();
+
    //    this.map.on('click', function () {
     //   sidebar.hide();
     // })
@@ -104,7 +167,19 @@ class Map extends React.Component {
       console.log('Close button clicked.');
     });
 
-  }
+    const menu_button=this.generate_button('topleft');
+    console.log("here!",menu_button)
+    this.map.addControl(menu_button)
+    // .on('click', function () {
+    //   sidebar_menu.toggle();
+    //   console.log('Boton Click')
+    // });;
+
+    L.DomEvent.on(menu_button.getChangeButton(), 'click', function () {
+      sidebar_menu.toggle();
+    });
+
+}
 // componentDidUpdate({ markerPosition }) {
 //   // check if position has changed
 //   if (this.props.markerPosition !== markerPosition) {
