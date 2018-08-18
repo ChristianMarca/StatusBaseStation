@@ -213,6 +213,8 @@ class Map extends React.Component {
         })
         layer.on('click', function () {
           sidebar.toggle();
+          var audio = new Audio('../../audio/select.mp3');
+          audio.play();
         })
       }
     }).addTo(this.map);
