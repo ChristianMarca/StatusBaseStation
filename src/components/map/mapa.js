@@ -38,6 +38,8 @@ var markers = L.markerClusterGroup({
   removeOutsideVisibleBounds:true,
 });
 
+
+
 // function getInfoFrom(object) {
 //   var popupFood = [];
 //   for (var key in object) {
@@ -55,9 +57,16 @@ class Map extends React.Component {
   constructor(){
     super();
     this.state={
-
+      value: '',
+      dataToSearch:[],
+      data:{},
+      dataSelect:{}
     };
   }
+  // componentDidUpdate(){
+    
+  //   console.log('Si se ejecuto')
+  // }
   
   generate_sidebar=(tagName, position)=>{
     var sidebar = L.control.sidebar(tagName, {
@@ -130,11 +139,12 @@ class Map extends React.Component {
 
   setTimeout(function () {
     sidebar_menu.show();
-  }, 50);
+    sidebar.show();
+  }, 1500);
 
-  setTimeout(function () {
-    sidebar_menu.hide();
-  }, 1000);
+  // setTimeout(function () {
+   
+  // }, 1500);
 
   // var marker = L.marker([-2.19, -79.4])
   //   .addTo(this.map)
@@ -190,40 +200,7 @@ class Map extends React.Component {
     sidebar_menu.toggle();
   });  
 
-  fetch('http://localhost:3000/data',{
-    method: 'GET',
-    headers: {'Content-Type': 'application/json'},
-    // body: JSON.stringify({
-    //     // id: this.state.user.id,
-    // })
-  }).then(response=>{
-    return  response.json()
-  }).then(jsonData=>{
-    return jsonData.jsonData;
-  }).then(myData=>{
-    L.geoJson(myData,{
-      onEachFeature: function (feature, layer) {
-        markers.addLayer(layer);
-        layer.on('mouseover',()=>{
-          layer.bindPopup(feature.properties.f2)
-          .openPopup();
-        })
-        layer.on('mouseout',()=>{
-          layer.closePopup();
-        })
-        layer.on('click', function () {
-          sidebar.toggle();
-          var audio = new Audio('../../audio/select.mp3');
-          audio.play();
-        })
-      }
-    }).addTo(this.map);
-  }).catch(err=>console.log(err))
-
-  this.map.addLayer(markers)
-
-
-  // fetch('http://localhost:3000/filter?name=Starbucks',{
+  // fetch('http://localhost:3000/data',{
   //   method: 'GET',
   //   headers: {'Content-Type': 'application/json'},
   //   // body: JSON.stringify({
@@ -234,11 +211,9 @@ class Map extends React.Component {
   // }).then(jsonData=>{
   //   return jsonData.jsonData;
   // }).then(myData=>{
+  //   console.log('json Data',myData);
   //   L.geoJson(myData,{
   //     onEachFeature: function (feature, layer) {
-  //       // layer.bindPopup(feature.properties.f2);
-  //       // console.log('feacture',feature, layer)
-  //       // console.log(feature.geometry.coordinates[0],feature.geometry.coordinates[1])
   //       markers.addLayer(layer);
   //       layer.on('mouseover',()=>{
   //         layer.bindPopup(feature.properties.f2)
@@ -249,17 +224,97 @@ class Map extends React.Component {
   //       })
   //       layer.on('click', function () {
   //         sidebar.toggle();
+  //         var audio = new Audio('../../audio/select.mp3');
+  //         audio.play();
   //       })
   //     }
   //   }).addTo(this.map);
   // }).catch(err=>console.log(err))
 
   // this.map.addLayer(markers)
+ 
+  function getData(data) {
+    let dataObject=[];
+    return new Promise(resolve => {
+      var _data=data.features.map(object=>{
+        dataObject=Object.assign(object.properties,object.geometry)
+        return dataObject
+      })
+      resolve(_data);
+    })
+  }
+
+  fetch('http://localhost:3000/filter?name=Starbucks',{
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+    // body: JSON.stringify({
+    //     // id: this.state.user.id,
+    // })
+  }).then(response=>{
+    return  response.json()
+  }).then(jsonData=>{
+    return jsonData.jsonData;
+  }).then(myData=>{
+
+    async function _getData(Data) {
+        var _data= await getData(Data);
+        return _data
+        };
+
+    _getData(myData).then(datos=>{
+      this.setState({dataToSearch:datos})
+      // console.log('asds',d)
+      return datos
+    });
+
+    //console.log('aqui llego',_data)
+    
+    L.geoJson(myData,{
+      onEachFeature: function (feature, layer) {
+        // layer.bindPopup(feature.properties.f2);
+        // console.log('feacture',feature, layer)
+        // console.log(feature.geometry.coordinates[0],feature.geometry.coordinates[1])
+        markers.addLayer(layer);
+        layer.on('mouseover',()=>{
+          layer.bindPopup(feature.properties.f2)
+          .openPopup();
+        })
+        layer.on('mouseout',()=>{
+          layer.closePopup();
+        })
+        layer.on('click', () =>{
+          // sidebar.toggle();
+          handleClick(feature)
+          // console.log(feature)
+        })
+      }
+    }).addTo(this.map);
+  }).catch(err=>console.log(err))
+
+  const handleClick=(data)=>{
+    this.setState({dataSelect: data})
+    sidebar.toggle();
+  }
+
+  this.map.addLayer(markers)
+
+  // markers.on('click',(e)=>{
+  //   // this.setState({dataSelect:e})
+  //   console.log(markers)
+  //   let data=markers._featureGroup._layers;
+  //   let key=String(Object.keys(data)[0]);
+  //   console.log('degas2',data)
+  //   console.log(key)
+  //   let _data=data
+  //   console.log('degas',_data)
+  //   this.setState({dataSelect:_data})
+  // //  console.log(feature)
+  // })
 
 
 
 
-}
+ }
 // componentDidUpdate({ markerPosition }) {
 //   // check if position has changed
 //   // if (this.props.markerPosition !== markerPosition) {
@@ -268,14 +323,45 @@ class Map extends React.Component {
 //   this.map.addLayer(markers)
 // }
 
+  enter=(value)=>{
+    this.setState({value})
+  }
+  locate=(data)=>{
+    console.log('La data retornada',data.coordinates)
+    this.setState({data:data})
+    var southWest = L.latLng(40.712, -74.227),
+    northEast = L.latLng(40.774, -74.125),
+    bounds = L.latLngBounds(southWest, northEast);
+    try{
+    this.map.flyTo(L.latLng(data.coordinates[1],data.coordinates[0]),18);
 
+
+    var popupt = L.popup().setLatLng([data.coordinates[1],data.coordinates[0]])
+    .setContent("Click In me").openPopup().closePopup().openOn(this.map);
+
+  //  setTimeout(function () {
+  //   popupt.closePopup()
+  // }, 10000).bind(this);
+
+  // popupt.closePopup()
+  
+
+  //   setTimeout(function () {
+  //   popup.closePopup()
+  // }, 1000);
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 
   render() {
+    // console.log('uneva data',this.state.dataToSearch)
     return (
     <div>
       <div id="map" />
-      <Side />
-      <SideMenu />
+      <Side value={this.state.value} dataSearch={this.state.dataSelect}/>
+      <SideMenu value_return={this.enter} menuList={this.state.dataToSearch} locate={this.locate}/>
     </div>
   )
   }
