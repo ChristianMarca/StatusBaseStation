@@ -5,7 +5,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding: 10px;
-    z-index: 2000;
+    z-index: 400;
 }
 
 .leaflet-sidebar.left {
@@ -47,7 +47,19 @@
 }
 
 .leaflet-sidebar>.leaflet-control:hover {
-    background: white;
+    /* background: white; */
+    background: rgba(255, 255, 255, 1);
+    background: -moz-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(16%, rgba(246, 246, 246, 0.9)), color-stop(53%, rgba(237, 237, 237, 0.67)), color-stop(100%, rgba(237, 237, 237, 0.38)));
+    background: -webkit-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
+    background: -o-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
+    background: -ms-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
+    background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=1);
+    border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+    -webkit-border-radius: 11px 11px 11px 11px;
+    border: 0px solid #000000;
 }
 
 .leaflet-touch .leaflet-sidebar>.leaflet-control {
@@ -139,7 +151,7 @@
     -webkit-border-radius: 6px;
     border-radius: 6px;
     cursor: pointer;
-    z-index: 2500;
+    z-index: 1000;
     transition: 0.5s;
 }
 
