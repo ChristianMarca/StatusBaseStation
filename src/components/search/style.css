@@ -8,6 +8,17 @@ h1 {
     /* top: -50px; */
 }
 
+h3 {
+    position: relative;
+    font-family: 'Kalam', cursive;
+    font-size: 20px;
+    color: #777;
+}
+
+.locationContainer {
+    padding: 0px;
+}
+
 hr {
     color: red;
 }
@@ -54,7 +65,7 @@ hr {
 
 .react-autosuggest__suggestions-container--open {
     display: block;
-    position: absolute;
+    /* position: absolute; */
     top: 30px;
     width: 100%;
     border: 1px solid #aaa;

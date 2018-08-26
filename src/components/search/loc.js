@@ -39,113 +39,6 @@ class Location extends React.Component {
   }
 }
 
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
-//############codigo 1##############
-// function escapeRegexCharacters(str) {
-//   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-// }
-
-// function getSuggestions(value) {
-//   const escapedValue = escapeRegexCharacters(value.trim());
-  
-//   if (escapedValue === '') {
-//     return [];
-//   }
-
-//   const regex = new RegExp('^' + escapedValue, 'i');
-
-//   return languages
-//     .map(section => {
-//       return {
-//         title: section.title,
-//         languages: section.languages.filter(language => regex.test(language.name))
-//       };
-//     })
-//     .filter(section => section.languages.length > 0);
-// }
-
-// function getSuggestionValue(suggestion) {
-//   return suggestion.name;
-// }
-
-// function do_something(){
-//   alert('fpskd')
-// }
-// function do_something_else(){
-//   console.log('fpskd')
-// }
-// function renderSuggestion(suggestion) {
-//   return (
-//     // <span>{suggestion.name}</span>
-//     <button onClick={do_something}>{suggestion.name}</button>
-//   );
-// }
-
-// function renderSectionTitle(section) {
-//   return (
-//     <strong>{section.title}</strong>
-//   );
-// }
-
-// function getSectionSuggestions(section) {
-//   return section.languages;
-// }
-
-// function renderSuggestionsContainer(options){
-
-//   return (
-//     <div>
-//       {options.children}
-//       {options.children(<div><button onClick={do_something_else}>Another function</button></div>)}
-//     </div>
-//     )
-//   }
-
-//################Finc odigo 1############
-
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
-// function escapeRegexCharacters(str) {
-//   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-// }
-
-// function getSuggestions(value) {
-//   const escapedValue = escapeRegexCharacters(value.trim());
-//   const regex = new RegExp('^' + escapedValue, 'i');
-  
-//   return users.filter(user => regex.test(user.f2) || regex.test(user.f3) || regex.test(user.coordinates));
-// }
-
-// function getSuggestionf2(suggestion) {
-//   return suggestion.f2;
-// }
-
-// function getSuggestionf3(suggestion) {
-//   return suggestion.f3;
-// }
-
-// function getSuggestioncoordinates(suggestion) {
-//   return suggestion.coordinates;
-// }
-
-// function renderSuggestion(suggestion) {
-//   return (
-//     <span>{suggestion.f2} - {suggestion.f3} - {suggestion.coordinates}</span>
-//   );
-// }
-// function clickBtn(){
-//   alert('button clicked when mouse enter');
-// }
-
-// function renderSuggestion(suggestion) {
-//   return (
-//     <div>
-//       <button onClick={clickBtn}>Click me</button>
-//     <span>{suggestion.f2}</span>
-//       </div>
-//   );
-// }
-
-
 class CajaTxt extends React.Component {
   constructor(props) {
     super(props);
@@ -211,100 +104,6 @@ class CajaTxt extends React.Component {
       <span>{suggestion.f2}/{suggestion.f3}/{suggestion.coordinates}</span>
     );
   }
-  
-  // componentDidUpdate(){
-  //   const {menuList}=this.props;
-  //     this.setState({RadioBases: menuList})
-
-  //   console.log('Casi al fina',this.state.RadioBases)
-  // }
-
-  // handleChange(event) {
-  //   this.setState({valueCajaTxt: event.target.value});
-  //   this.props.value(event.target.value);
-  //   console.log(event.target.value)
-  //   // this.props.value(this.state.value);
-  //   // console.log(event)
-  //   // console.log(event.charCode)
-  //   // console.log(event.target.value)
-  // }
-
-  // _handleKeyPress = (event) => {
-  //   if (event.key === 'Enter') {
-  //     console.log('do validate');
-  //     this.props.value(this.state.valueCajaTxt);
-  //   }
-  // }
-
-  //#####Codigo 1########
-
-  // onChange = (event, { newValue, method }) => {
-  //   // alert(method)
-  //   this.props.value(event.target.value);
-  //   this.setState({
-  //     value: newValue
-  //   });
-  // };
-  // //##############################
-  // onSuggestionsFetchRequested = ({ value }) => {
-  //   this.setState({
-  //     suggestions: getSuggestions(value)
-  //   });
-  // };
-
-  // onSuggestionsClearRequested = () => {
-  //   this.setState({
-  //     suggestions: []
-  //   });
-  // };
-
-  // onSuggestionSelected = (event,{ suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-
-  //   alert(method)
-
-  //   this.setState({
-  //     f3Suggestions: []
-  //   });
-  // };
-
-  // onSuggestionHighlighted=()=>{
-  //   // alert('focus')
-  // }
-
-  // onKeyDown(event) {
-  //   console.log("ev",event)
-  //   if (event.key === 'Enter') {
-  //     console.log('Enter pressed!')
-  //     this.props.value(event.target.value);
-  //     this.onSuggestionsClearRequested();
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   }
-  // }
-  // onrenderSuggestionsContainer({ containerProps, children,query }){
-  //   console.log('children',containerProps)
-  //   const { ref, ...restContainerProps } = containerProps;
-  //   const callRef = isolatedScroll => {
-  //     if (isolatedScroll !== null) {
-  //       ref(isolatedScroll.component);
-  //     }
-  //   };
-
-  //   return (
-  //     <IsolatedScroll ref={callRef} {...restContainerProps}>
-  //       {children}
-  //     </IsolatedScroll>
-  //   );
-  // }
-  //####### Fin codigo 1######
-
-  // onChange = (event, { newValue, method }) => {
-  //   this.setState({
-  //     value: newValue
-  //   });
-  // };
 
   onf2Change = (event, { newValue }) => {
     this.setState({
@@ -349,7 +148,7 @@ class CajaTxt extends React.Component {
       coordinatesValue: String(suggestion.coordinates),
       informationValue: suggestion,
     });
-    this.props.locate(this.state.informationValue)
+    this.props.locate(suggestion)
     event.preventDefault();
     event.stopPropagation();
   };
@@ -417,17 +216,6 @@ class CajaTxt extends React.Component {
     }
 
   render() {
-    // const {value}=this.props;
-    // console.log(value)
-    //######c1#######
-    // const { value, suggestions } = this.state;
-    // const inputProps = {
-    //   placeholder: "Ej. Azuay, Cuenca, El vecino",
-    //   value,
-    //   // onChange: this.onChange,
-    //   // onKeyDown: this.onKeyDown,
-    // };
-    ///##fin c1###
 
     const { 
       f2Value, 
@@ -458,34 +246,8 @@ class CajaTxt extends React.Component {
 
     return( 
       
-      <form>
-        {/* <div className="card-header">Buscar RadioBase</div> */}
-          {/* <form>
-            <div> */}
-              {/* <input type="text" value={this.state.value} onChange={this.handleChange} onKeyPress={this._handleKeyPress} placeholder="Ej. Azuay, Cuenca, El vecino">
-              
-              </input> */}
-
-              {/* <Autosuggest 
-              multiSection={true}
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              onSuggestionSelected={this.onSuggestionSelected}
-              onSuggestionHighlighted={this.onSuggestionHighlighted}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              renderSectionTitle={renderSectionTitle}
-              getSectionSuggestions={getSectionSuggestions}
-              renderSuggestionsContainer={this.onrenderSuggestionsContainer}
-              inputProps={inputProps}
-               /> */}
-
-            {/* </div>
-          </form> */}
-        {/* </div> */}
-        {/* ################### */}
-        <h1>Nombre</h1>
+      <div className="locationContainer">
+        <h3>Nombre</h3>
         <Autosuggest
           id="f2" 
           suggestions={f2Suggestions}
@@ -496,7 +258,7 @@ class CajaTxt extends React.Component {
           renderSuggestion={this.renderSuggestion}
           inputProps={f2InputProps}
         />
-        <h1>Provincia</h1>
+        <h3>Provincia</h3>
         <Autosuggest 
           id="f3"
           suggestions={f3Suggestions}
@@ -507,7 +269,7 @@ class CajaTxt extends React.Component {
           renderSuggestion={this.renderSuggestion}
           inputProps={f3InputProps}
         />
-        <h1>Canton</h1>
+        <h3>Canton</h3>
         <Autosuggest 
           id="coordinates"
           suggestions={coordinatesSuggestions}
@@ -519,7 +281,7 @@ class CajaTxt extends React.Component {
           inputProps={coordinatesInputProps}
         />
      
-      </form>
+      </div>
     )}
 }
 
