@@ -2,19 +2,24 @@ import L from "leaflet";
 
 L.Control.Sidebar = L.Control.extend({
 
-    includes: L.Mixin.Events,
+    //includes: L.Mixin.Events,
+    includes: (L.Evented.prototype || L.Mixin.Events),
 
     options: {
         closeButton: true,
+        memuDiv: true,
         position: 'left',
         autoPan: true,
+        componente:'<h1>Hola</h1>',
     },
+
 
     initialize: function (placeholder, options) {
         L.setOptions(this, options);
 
         // Find content container
         var content = this._contentContainer = L.DomUtil.get(placeholder);
+        console.log('contenido',content)
 
         // Remove the content container from its original parent
         content.parentNode.removeChild(content);
@@ -35,6 +40,13 @@ L.Control.Sidebar = L.Control.extend({
                 L.DomUtil.create('a', 'close', container);
             close.innerHTML = '&times;';
         }
+        if (this.options.menuDiv) {
+            var menu=this._menu=
+                L.DomUtil.create('a', 'menu', container);
+            // alert(this.options.componente)
+            menu.innerHTML=this.options.componente
+        }
+        
     },
 
     addTo: function (map) {
@@ -46,6 +58,13 @@ L.Control.Sidebar = L.Control.extend({
             var close = this._closeButton;
 
             L.DomEvent.on(close, 'click', this.hide, this);
+
+        }
+        if (this.options.menuDiv) {
+
+            var menu = this._menu;
+
+            L.DomEvent.on(menu, 'click', this.clicks, this);
         }
 
         L.DomEvent
@@ -147,6 +166,10 @@ L.Control.Sidebar = L.Control.extend({
             L.DomEvent.stopPropagation(e);
         }
     },
+    clicks: function(e){
+        alert('Se dio un click interno',e)
+    }
+    ,
 
     toggle: function () {
         if (this.isVisible()) {

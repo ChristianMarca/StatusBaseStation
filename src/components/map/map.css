@@ -1,14 +1,79 @@
-/* .container {
+        /* .container {
     height: 100%;
 } */
-
+        
 #map {
-    background-color: 'green';
+    // background-color: 'green';
     /* height: '100vh'; */
-    width: '100px';
-    height: 100vh;
+    width: '100%';
+    height: 94vh;
+    z-index: 0;
+    /* width: '100px';
+height: 100vh; */
+}
+.navContainer{
+    // display: flex;
+    //  flex-direction: row;
+    //  flex-grow:2;
+    //  flex-shrink:2;
+    //  justify-content: space-around;
+     width: 100%;
 }
 
+.collapseMenu1{
+    right: 15px;
+    color: white;
+    z-index: 1;
+    position: absolute;
+    background: #373a47;
+    // width: 100%;
+}
+@media only screen and (max-width: 768px){
+    .collapseMenu1{
+        right: 15px;
+        color: white;
+        z-index: 1;
+        position: absolute;
+        background: #373a47;
+        width: 100%;
+    }
+  }
+
+.navContainer .collapseMenu2{
+    // display: block;
+    // z-index: 1;
+    // position: absolute;
+    // background: #373a47;
+    text-decoration: none;
+    display: block;
+    padding: 1em;
+    color: white;
+    // z-index: 1;
+    // position: absolute;
+    justify-content: flex-end;
+}
+
+.mapa {
+    padding-right: 3px;
+}
+.Columna {
+    width: 1000px;
+}
+
+.navbar-header {
+    // background-color: #F16E10;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+.navbar-collapse{
+    color: red;
+    font-size: 20px;
+    align-content: center;
+    padding: 0px;
+    color: red;
+   
+}
 .info {
     text-align: center;
     text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);
@@ -24,12 +89,155 @@
 
 .info:hover {
     /* background: rgba(255, 255, 255, 1);
-    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(246, 246, 246, 0.72)), color-stop(100%, rgba(237, 237, 237, 0.41)));
-    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
-    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
-    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0); */
+background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(246, 246, 246, 0.72)), color-stop(100%, rgba(237, 237, 237, 0.41)));
+background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
+background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
+background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
+background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.72) 47%, rgba(237, 237, 237, 0.41) 100%);
+filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0); */
     transform: scale(1.2)
+}
+/* Position and sizing of burger button */
+
+.bm-menu-wrap,
+.bm-overlay {
+top: 0;
+left: 0;
+}
+
+.bm-burger-button {
+    position: fixed;
+    width: 0px;
+    height: 0px;
+    left: 0px;
+    top: 0px;
+}
+/* Color/shape of burger icon bars */
+
+.bm-burger-bars {
+    background: #373a47;
+}
+/* Position and sizing of clickable cross button */
+
+.bm-cross-button {
+    position: fixed;
+    // height: 24px;
+    // width: 24px;
+}
+
+.bm-morph-shape {
+    fill: #373a47;
+    }
+
+/* Color/shape of close button cross */
+
+.bm-cross {
+    background: #bdc3c7;
+}
+/* General sidebar styles */
+
+.bm-menu {
+    background: #373a47;
+    padding: 3em 0.9em 0em 0.9em;
+    font-size: 0.9em;
+    width: 100%;
+}
+/* Morph shape necessary with bubble or elastic */
+
+.bm-morph-shape {
+    fill: #373a47;
+}
+/* Wrapper for item list */
+
+.bm-item-list {
+    color: #b8b7ad;
+    // padding: 0.8em;
+    width: 100%;
+}
+/* Individual item */
+
+.bm-item {
+    display: inline-block;
+}
+/* Styling of overlay */
+
+.bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+}
+/* .bm-menu-wrap,
+.bm-overlay {
+    top: 0;
+    left: 0;
+} */
+
+.informacion {
+    /* z-index: 20000 !important;
+color: red !important; */
+}
+
+.react-autosuggest__input {
+    /* position: absolute;
+right: 40px;
+top: 20px;
+width: 100%;
+height: 31px;
+color: #e7040f;
+font-size: 25px;
+line-height: 1em;
+text-align: center;
+background: rgba(0, 0, 0, 0.005);
+-webkit-border-radius: 6px;
+border-radius: 6px;
+cursor: pointer;
+z-index: 1000;
+transition: 0.5s; */
+}
+
+.react-autosuggest__suggestions-list,
+react-autosuggest__suggestions-container react-autosuggest__suggestions-container--open {
+    /* position: absolute; */
+    /* right: 40px;
+top: 20px; */
+    /* width: 100%;
+height: 31px; */
+    /* color: blue; */
+    /* font-size: 25px;
+line-height: 1em;
+text-align: center;
+background: rgba(0, 0, 0, 0.005);
+-webkit-border-radius: 6px;
+border-radius: 6px;
+cursor: pointer; */
+    /* z-index: 200000; */
+    /* transition: 0.5s; */
+}
+
+//Contenedores de  Grup button
+.selection{
+    width: 100%;
+    height: 10px;
+    background: red;
+}
+.panel{
+   width: 100%;
+   position: relative;
+}
+.panelHead{
+    background: #373a47;
+}
+.GrupButtons{
+    display: flex;
+  justify-content: center;
+}
+.panelTitle{
+    color: whitesmoke;
+}
+.buttons{
+    background: whitesmoke; 
+    color: #373a47;
+}
+.buttons:hover{
+    background: #373a47;
+    color: whitesmoke;
 }
