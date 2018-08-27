@@ -38,15 +38,17 @@
     box-sizing: border-box;
     padding: 8px 24px;
     font-size: 1.1em;
-    background: rgba(0, 0, 0, 0.25);
-    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
+    background: #373a47;
+    /* background: rgba(0, 0, 0, 0.25); */
+    border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+    -webkit-border-radius: 11px 11px 11px 11px;
+    border: 0px solid #000000;
     transition: 0.5s;
 }
 
 .leaflet-sidebar>.leaflet-control:hover {
-    /* background: white; */
+    /* background: white;
     background: rgba(255, 255, 255, 1);
     background: -moz-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
     background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(16%, rgba(246, 246, 246, 0.9)), color-stop(53%, rgba(237, 237, 237, 0.67)), color-stop(100%, rgba(237, 237, 237, 0.38)));
@@ -55,10 +57,11 @@
     background: -ms-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
     background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 0.9) 16%, rgba(237, 237, 237, 0.67) 53%, rgba(237, 237, 237, 0.38) 100%);
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=1);
+   
     border-radius: 11px 11px 11px 11px;
     -moz-border-radius: 11px 11px 11px 11px;
     -webkit-border-radius: 11px 11px 11px 11px;
-    border: 0px solid #000000;
+    border: 0px solid #000000; */
 }
 
 .leaflet-touch .leaflet-sidebar>.leaflet-control {
@@ -142,11 +145,11 @@
     top: 20px;
     width: 31px;
     height: 31px;
-    color: #e7040f;
+    color: whitesmoke;
     font-size: 25px;
     line-height: 1em;
     text-align: center;
-    background: rgba(0, 0, 0, 0.005);
+    /* background: rgba(0, 0, 0, 0.005); */
     -webkit-border-radius: 6px;
     border-radius: 6px;
     cursor: pointer;

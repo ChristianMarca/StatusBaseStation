@@ -47,12 +47,12 @@ class CajaTxt extends React.Component {
       value: '',
       suggestions: [],
 
-      f2Value: '',
-      f2Suggestions: [],
-      f3Value: '',
-      f3Suggestions: [],
-      coordinatesValue: '',
-      coordinatesSuggestions: [],
+      f4Value: '',
+      f4Suggestions: [],
+      f8Value: '',
+      f8Suggestions: [],
+      f7Value: '',
+      f7Suggestions: [],
 
       informationValue:{},
 
@@ -84,68 +84,68 @@ class CajaTxt extends React.Component {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
     
-    return this.state.RadioBases.filter(user => regex.test(user.f2) || regex.test(user.f3) || regex.test(user.coordinates));
+    return this.state.RadioBases.filter(user => regex.test(user.f4) || regex.test(user.f8) || regex.test(user.f7));
   }
   
-  getSuggestionf2(suggestion) {
-    return suggestion.f2;
+  getSuggestionf4(suggestion) {
+    return String(suggestion.f4);
   }
   
-  getSuggestionf3(suggestion) {
-    return suggestion.f3;
+  getSuggestionf8(suggestion) {
+    return String(suggestion.f8);
   }
   
-  getSuggestioncoordinates(suggestion) {
-    return String(suggestion.coordinates);
+  getSuggestionf7(suggestion) {
+    return String(suggestion.f7);
   }
   
   renderSuggestion(suggestion) {
     return (
-      <span>{suggestion.f2}/{suggestion.f3}/{suggestion.coordinates}</span>
+      <span>{suggestion.f4}/{suggestion.f8}/{suggestion.f7}</span>
     );
   }
 
-  onf2Change = (event, { newValue }) => {
+  onf4Change = (event, { newValue }) => {
     this.setState({
-      f2Value: newValue
+      f4Value: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
 
-  onf3Change = (event, { newValue }) => {
+  onf8Change = (event, { newValue }) => {
     this.setState({
-      f3Value: newValue
+      f8Value: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
 
-  oncoordinatesChange = (event, { newValue }) => {
+  onf7Change = (event, { newValue }) => {
     this.setState({
-      coordinatesValue: newValue
+      f7Value: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
   
-  onf2SuggestionsFetchRequested = ({ value }) => {
+  onf4SuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f2Suggestions: this.getSuggestions(value)
+      f4Suggestions: this.getSuggestions(value)
     });
   };
 
-  onf2SuggestionsClearRequested = (event) => {
+  onf4SuggestionsClearRequested = (event) => {
     this.setState({
-      f2Suggestions: []
+      f4Suggestions: []
     });
   };
 
-  onf2SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  onf4SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     console.log(method)
     this.setState({
-      f3Value: suggestion.f3,
-      coordinatesValue: String(suggestion.coordinates),
+      f8Value: suggestion.f8,
+      f7Value: String(suggestion.f7),
       informationValue: suggestion,
     });
     this.props.locate(suggestion)
@@ -153,23 +153,23 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
-  oncoordinatesSuggestionsFetchRequested = ({ value }) => {
+  onf7SuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      coordinatesSuggestions: this.getSuggestions(String(value))
+      f7Suggestions: this.getSuggestions(String(value))
     });
   };
 
-  oncoordinatesSuggestionsClearRequested = (event) => {
+  onf7SuggestionsClearRequested = (event) => {
     this.setState({
-      coordinatesSuggestions: []
+      f7Suggestions: []
     });
   };
 
-  oncoordinatesSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  onf7SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     console.log(method)
     this.setState({
-      f3Value: suggestion.f3,
-      f2Value: suggestion.f2,
+      f8Value: suggestion.f8,
+      f4Value: suggestion.f4,
       informationValue: suggestion,
     });
     this.props.locate(this.state.informationValue)
@@ -177,22 +177,22 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
-  onf3SuggestionsFetchRequested = ({ value }) => {
+  onf8SuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f3Suggestions: this.getSuggestions(value)
+      f8Suggestions: this.getSuggestions(value)
     });
   };
 
-  onf3SuggestionsClearRequested = () => {
+  onf8SuggestionsClearRequested = () => {
     this.setState({
-      f3Suggestions: []
+      f8Suggestions: []
     });
   };
 
-  onf3SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  onf8SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     this.setState({
-      f2Value: suggestion.f2,
-      coordinatesValue: String(suggestion.coordinates),
+      f4Value: suggestion.f4,
+      f7Value: String(suggestion.f7),
       informationValue: suggestion,
       
     });
@@ -218,67 +218,67 @@ class CajaTxt extends React.Component {
   render() {
 
     const { 
-      f2Value, 
-      f2Suggestions, 
-      f3Value, 
-      f3Suggestions ,
-      coordinatesSuggestions,
-      coordinatesValue
+      f4Value, 
+      f4Suggestions, 
+      f8Value, 
+      f8Suggestions ,
+      f7Suggestions,
+      f7Value
     } = this.state;
-    const f2InputProps = {
+    const f4InputProps = {
       placeholder: "Name",
-      value: f2Value,
-      onChange: this.onf2Change,
+      value: f4Value,
+      onChange: this.onf4Change,
       onKeyDown: this.onKeyDown,
     };
-    const f3InputProps = {
+    const f8InputProps = {
       placeholder: "City",
-      value: f3Value,
-      onChange: this.onf3Change,
+      value: f8Value,
+      onChange: this.onf8Change,
       onKeyDown: this.onKeyDown,
     };
-    const coordinatesInputProps = {
-      placeholder: "coordinates",
-      value: coordinatesValue,
-      onChange: this.oncoordinatesChange,
+    const f7InputProps = {
+      placeholder: "f7",
+      value: f7Value,
+      onChange: this.onf7Change,
       onKeyDown: this.onKeyDown,
     };
 
     return( 
       
       <div className="locationContainer">
-        <h3>Nombre</h3>
+        <h3>Estructura</h3>
         <Autosuggest
-          id="f2" 
-          suggestions={f2Suggestions}
-          onSuggestionsFetchRequested={this.onf2SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf2SuggestionsClearRequested}
-          onSuggestionSelected={this.onf2SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf2}
+          id="f4" 
+          suggestions={f4Suggestions}
+          onSuggestionsFetchRequested={this.onf4SuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onf4SuggestionsClearRequested}
+          onSuggestionSelected={this.onf4SuggestionSelected}
+          getSuggestionValue={this.getSuggestionf4}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f2InputProps}
+          inputProps={f4InputProps}
         />
-        <h3>Provincia</h3>
+        <h3>Dirección</h3>
         <Autosuggest 
-          id="f3"
-          suggestions={f3Suggestions}
-          onSuggestionsFetchRequested={this.onf3SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf3SuggestionsClearRequested}
-          onSuggestionSelected={this.onf3SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf3}
+          id="f8"
+          suggestions={f8Suggestions}
+          onSuggestionsFetchRequested={this.onf8SuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onf8SuggestionsClearRequested}
+          onSuggestionSelected={this.onf8SuggestionSelected}
+          getSuggestionValue={this.getSuggestionf8}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f3InputProps}
+          inputProps={f8InputProps}
         />
-        <h3>Canton</h3>
+        <h3>Parroquia</h3>
         <Autosuggest 
-          id="coordinates"
-          suggestions={coordinatesSuggestions}
-          onSuggestionsFetchRequested={this.oncoordinatesSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.oncoordinatesSuggestionsClearRequested}
-          onSuggestionSelected={this.oncoordinatesSuggestionSelected}
-          getSuggestionValue={this.getSuggestioncoordinates}
+          id="f7"
+          suggestions={f7Suggestions}
+          onSuggestionsFetchRequested={this.onf7SuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onf7SuggestionsClearRequested}
+          onSuggestionSelected={this.onf7SuggestionSelected}
+          getSuggestionValue={this.getSuggestionf7}
           renderSuggestion={this.renderSuggestion}
-          inputProps={coordinatesInputProps}
+          inputProps={f7InputProps}
         />
      
       </div>
