@@ -4,7 +4,10 @@ import './map.css';
 import 'tachyons';
 import L from "leaflet";
 
+// import './infoCard';
+
 import ReactModal from 'react-modal';
+import ListComponent from './infoCard';
 
 class Side extends React.Component {
   constructor(props){
@@ -13,7 +16,7 @@ class Side extends React.Component {
       name: "",
       address:"",
       coordinates:"",
-      BaseStatons: {},
+      BaseStations: {},
     }
   }
 
@@ -22,7 +25,8 @@ class Side extends React.Component {
     console.log('next',nextProps.dataSearch,'this', dataSearch)
     if (nextProps.dataSearch !== dataSearch || dataSearch){
       
-      this.setState({BaseStatons: nextProps.dataSearch})
+      this.setState({BaseStations: nextProps.dataSearch})
+      console.log('nuevo esatdor',nextProps.dataSearch)
       // const {value, dataSearch}=this.props;
       // console.log('asdd',this.props.dataSearch)
       try{
@@ -33,10 +37,13 @@ class Side extends React.Component {
           coordinates: this.props.dataSearch.properties.coordinates,
         }));
         this.forceUpdate(this.render)
+        
+        
       }
       catch(e){
         // console.log(e)
       }
+
     }
   }
 
@@ -51,26 +58,154 @@ class Side extends React.Component {
     // }
     
   }
-
+  componentWillMount=()=>{
+   
+  }
+  
+  getEstructura_id=()=>{
+    try{
+      return this.state.BaseStations.properties.f3;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getEstructura=()=>{
+    try{
+      return this.state.BaseStations.properties.f4;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getProvincia=()=>{
+    try{
+      return this.state.BaseStations.properties.f5;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getCanton=()=>{
+    try{
+      return this.state.BaseStations.properties.f6;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getParroquia=()=>{
+    try{
+      return this.state.BaseStations.properties.f7;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getDireccion=()=>{
+    try{
+      return this.state.BaseStations.properties.f8;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getCellID=()=>{
+    try{
+      return this.state.BaseStations.properties.f11;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getTecnologia=()=>{
+    try{
+      return this.state.BaseStations.properties.f12;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getDensidad=()=>{
+    try{
+      return this.state.BaseStations.properties.f13;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getOperadora=()=>{
+    try{
+      return this.state.BaseStations.properties.f15;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getStatus=()=>{
+    try{
+      return this.state.BaseStations.properties.f16;
+    }
+    catch(e){
+      return '';
+    }
+  }
+  getCoodenadas=()=>{
+    try{
+      return `${this.state.BaseStations.properties.f9}~${this.state.BaseStations.properties.f10}`
+    }
+    catch(e){
+      return '';
+    }
+  }
   render(){
     const {value}=this.props;
     // let elemento=<imageData existe={true}/>
-    let elemento=<img src="http://tachyons.io/img/logo.jpg" className="br1 h3 w3 dib" alt="avatar" />;
+    let elemento=<img src="http://tachyons.io/img/logo.jpg" className="br1 imageComponent" alt="avatar" />;
     return(
       <div id="sidebar">
       <h1 className="title">Información</h1>
 
       {/* <h1>{value}</h1> */}
-      <ul className="list pl0 ml0 center mw7 ba b--light-silver br3">
-      <li className="info ph3 pv2 bb b--light-silver">{elemento}</li>
-      <li className="info ph3 pv2 bb b--light-silver">{this.state.name}</li>
-      <li className="info ph3 pv2 bb b--light-silver">{this.state.address}</li>
-      <li className="info ph3 pv2 bb b--light-silver">{String(this.state.coordinates)}</li> 
+      <ul className="list pl0 ml0 center mw7 ba b--light-silver br3 informationContainer">
+        <li className="info ph3 pv2 bb">{elemento}</li>
+
+        <li className="info ph3 pv2 bb">
+          <div class="center br2 ba cardComponent">
+              <h4 class="white mv0 pv2 ph3 titleCardComponent">Radio Base</h4>
+              <div class="pa3 bt center">
+                {/* <p class="f5-ns lh-copy measure mv0"> */}
+                  {/* <h6 className="informationCard">Lorem ipsum dolor sit amet.
+
+
+                  </h6> */}
+                   
+                  <ListComponent title={'Estructura'} content={this.getEstructura()} />
+                  <ListComponent title={'Estructura ID'} content={this.getEstructura_id()} />
+                  <ListComponent title={'Provincia'} content={this.getProvincia()} />
+                  <ListComponent title={'Canton'} content={this.getCanton()} />
+                  <ListComponent title={'Parrroquia'} content={this.getParroquia()} />
+                  <ListComponent title={'Dirección'} content={this.getDireccion()} />
+                  <ListComponent title={'Tecnología'} content={this.getTecnologia()} />
+                  <ListComponent title={'Densidad'} content={this.getDensidad()} />
+                  <ListComponent title={'Operador'} content={this.getOperadora()} />
+                  <ListComponent title={'Status'} content={this.getStatus()} />
+                  <ListComponent title={'Coordenadas'} content={this.getCoodenadas()} />
+                  {/* <ListComponent title={'Titulo'} content={'AQUI LA informacon'} /> */}
+                
+
+
+                {/* </p> */}
+              </div>
+            </div>
+        </li>
       </ul>
       </div>
     )
   }
 }
+
+{/* <li className="info ph3 pv2 bb b--light-silver">{String(this.state.coordinates)}</li>  */}
 
 class SideMenu extends React.Component {
   constructor(props){

@@ -135,7 +135,7 @@ class Map extends React.Component {
   }
 
   // fetch('http://localhost:3000/data',{
-    fetch('http://192.168.1.102:3000/data',{
+    fetch('http://192.168.1.102:3000/data_radiobase',{
     method: 'GET',
     headers: {'Content-Type': 'application/json'},
     // body: JSON.stringify({
@@ -193,7 +193,7 @@ class Map extends React.Component {
     onEachFeature: async function(feature, layer) {
 
         await layer.on('mouseover',()=>{
-          layer.bindPopup(feature.properties.f2)
+          layer.bindPopup(feature.properties.f15)
           .openPopup();
         })
         await layer.on('mouseout',()=>{

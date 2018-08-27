@@ -192,7 +192,10 @@ class Mapaj extends Component {
                 </Panel.Heading>
                 <Panel.Body>
 
-                  <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate}/> 
+                  
+
+                    <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate}/>
+                    
                   
                 </Panel.Body>
               </Panel>
