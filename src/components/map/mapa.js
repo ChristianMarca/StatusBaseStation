@@ -135,7 +135,7 @@ class Map extends React.Component {
   }
 
   // fetch('http://localhost:3000/data',{
-    fetch('http://192.168.1.102:3000/data_radiobase',{
+  fetch('http://192.168.1.102:3000/data_radiobase',{
     method: 'GET',
     headers: {'Content-Type': 'application/json'},
     // body: JSON.stringify({
@@ -211,11 +211,13 @@ class Map extends React.Component {
 
     return barLayer 
 
-}).then((barLayer)=>{
-  markers.addLayer(barLayer);
-    this.map.addLayer(markers)
-}
-).catch(err=>console.log(err))
+  }).then((barLayer)=>{
+    markers.addLayer(barLayer);
+      this.map.addLayer(markers);
+      document.getElementById("spinner").style.visibility="hidden";
+  }
+  ).catch(err=>console.log(err))
+
 
   const handleClick=(data)=>{
     this.setState({dataSelect: data});
@@ -235,9 +237,9 @@ class Map extends React.Component {
 
 }).addTo( this.map );  
 
-  const clickMenu=()=>{
-    this.props.search('click')
-  }
+const clickMenu=()=>{
+  this.props.search('click')
+}
 
   // this.map.addControl(menu_button)
 
@@ -310,7 +312,7 @@ clickMenuRight=()=>{
 // }
 
 componentWillReceiveProps(nextProps){
-  const {locate}=this.props;
+  const {locate,optionsButtons}=this.props;
   // console.log('next',nextProps.locate,'this', locate)
   if (nextProps.loacte !== locate || locate || nextProps.locate){
 
@@ -328,6 +330,140 @@ componentWillReceiveProps(nextProps){
   }
 
   }
+  console.log('adsdffgghjh',optionsButtons,'scnod',nextProps.optionsButtons)
+  if (nextProps.optionsButtons !== optionsButtons){
+
+  this.setState({data:locate})
+  document.getElementById("spinner").style.visibility="visible";
+  try{
+    markers.clearLayers();
+
+    function getData(data) {
+      let dataObject=[];
+      return new Promise((resolve,reject) => {
+        try{
+          var _data=data.features.map(object=>{
+            dataObject=Object.assign(object.properties,object.geometry)
+            return dataObject
+          })
+          return resolve(_data);
+        }
+      catch(e){
+        alert('No se encontro Resultados')
+        return reject({})
+      }
+        
+      })
+    }
+
+    fetch('http://192.168.1.102:3000/filter_radiobase',{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+        provincia: nextProps.optionsButtons,
+    })
+    }).then(response=>{
+      return  response.json()
+    }).then(jsonData=>{
+      return jsonData.jsonData;
+    }).then(myData=>{
+
+      async function _getData(Data) {
+        var _data= await getData(Data);
+        return _data
+        };
+
+      _getData(myData).then(datos=>{
+        this.setState({dataToSearch:datos})
+        handleData(datos)
+        return datos
+      });
+    let barLayer=L.geoJson(myData,{
+        // onEachFeature: async function (feature, layer) {
+        //   console.log(layer)
+        //   async function _addMarker(layer) {
+        //     await addMarker(layer);
+            
+        //     await layer.on('mouseover',()=>{
+        //       layer.bindPopup(feature.properties.f2)
+        //       .openPopup();
+        //     })
+        //     await layer.on('mouseout',()=>{
+        //       layer.closePopup();
+        //     })
+        //     await layer.on('click', ()=> {
+        //       // sidebar.toggle();
+        //       var audio = new Audio('../../audio/select.mp3');
+        //       audio.play();
+        //       handleClick(feature)
+        //     })
+        //     return layer
+        //   };
+        //   _addMarker(layer)
+        // }
+
+      //   pointToLayer: function(feature, latlng) {
+      //     var icon = L.icon({
+      //                     iconSize: [27, 27],
+      //                     iconAnchor: [13, 27],
+      //                     popupAnchor:  [1, -24],
+      //                     // iconUrl: 'icon/' + feature.properties.amenity + '.png'
+      //                     });
+      //     return L.marker(latlng, {icon: icon})
+      // },
+      onEachFeature: async function(feature, layer) {
+
+          await layer.on('mouseover',()=>{
+            layer.bindPopup(feature.properties.f15)
+            .openPopup();
+          })
+          await layer.on('mouseout',()=>{
+            layer.closePopup();
+          })
+          await layer.on('click', ()=> {
+            sidebar.toggle();
+            var audio = new Audio('../../audio/select.mp3');
+            audio.play();
+            handleClick(feature)
+          })
+      }
+      
+      })
+
+      return barLayer 
+
+    }).then((barLayer)=>{
+      markers.addLayer(barLayer);
+        this.map.addLayer(markers)
+        document.getElementById("spinner").style.visibility="hidden";
+    }
+    ).catch(err=>console.log(err))
+
+    const handleClick=(data)=>{
+      this.setState({dataSelect: data});
+      // sidebar.toggle();
+    }
+    const handleData=(datos)=>{
+      this.props.obtainList(datos)
+    }
+    
+    const sidebar=this.generate_sidebar('sidebar','right',false);
+    console.log('helloMUHNO',nextProps.optionsButtons)
+  }
+  catch(err){
+    // console.log(err)
+  }
+
+  }
+  // let electionArray=[];
+  // for (var i in optionsButtons) {
+  //   if (optionsButtons.hasOwnProperty(i)) {
+  //       if(optionsButtons[i]){
+  //         electionArray.push(i)
+  //       }
+  //   }
+  // }
+  // console.log('clickeados',electionArray)
 }
 
 
@@ -338,10 +474,12 @@ componentWillReceiveProps(nextProps){
     return (
       
         <div id="map">
+        <div class="loader" id='spinner'></div>
         <Side value={this.state.value} dataSearch={this.state.dataSelect}/>
         </div>
   )
   }
+
 }
 
 export default Map;
