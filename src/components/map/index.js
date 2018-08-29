@@ -26,7 +26,18 @@ class Mapaj extends Component {
 
     menuOpen: false,
     openOperator: false,
-    openTecnology: false
+    openTecnology: false,
+
+    optionsButtons:{
+      CNT: false,
+      CONECEL: false,
+      OTECEL: false,
+      GSM: false,
+      LTE: false,
+      UMTS:false
+    },
+    optionSelected:[],
+    optionAcept:[],
 
    }
    
@@ -137,7 +148,62 @@ class Mapaj extends Component {
     searchMenu=(data)=>{
       this.toggleMenu ();
     }
-    
+    buttonSubmint=()=>{
+      this.setState({optionAcept:this.state.optionSelected})
+    }
+  
+    buttonsEvents=(data)=>{
+      let election = Object.assign({}, this.state.optionsButtons);    //creating copy of object
+      let electionArray=[];
+      switch(data){
+        case 'CNT':
+          document.getElementById(data).style.background=!this.state.optionsButtons.CNT?'#373a47':'whitesmoke';
+          document.getElementById(data).style.color=this.state.optionsButtons.CNT?'#373a47':'whitesmoke';
+          election.CNT =!this.state.optionsButtons.CNT;
+          this.setState({optionsButtons: election})
+          break;
+        case 'CONECEL':
+          document.getElementById(data).style.background=!this.state.optionsButtons.CONECEL?'#373a47':'whitesmoke';
+          document.getElementById(data).style.color=this.state.optionsButtons.CONECEL?'#373a47':'whitesmoke';
+          election.CONECEL =!this.state.optionsButtons.CONECEL;
+          this.setState({optionsButtons: election})
+          break;
+        case 'OTECEL':
+          document.getElementById(data).style.background=!this.state.optionsButtons.OTECEL?'#373a47':'whitesmoke';
+          document.getElementById(data).style.color=this.state.optionsButtons.OTECEL?'#373a47':'whitesmoke';
+          election.OTECEL =!this.state.optionsButtons.OTECEL;
+          this.setState({optionsButtons: election})
+          break;
+        case 'GSM':
+          document.getElementById(data).style.background=!this.state.optionsButtons.GSM?'#373a47':'whitesmoke';
+          document.getElementById(data).style.color=this.state.optionsButtons.GSM?'#373a47':'whitesmoke';
+          election.GSM =!this.state.optionsButtons.GSM;
+          this.setState({optionsButtons: election})
+          break;
+        case 'LTE':
+          document.getElementById(data).style.background=!this.state.optionsButtons.LTE?'#373a47':'whitesmoke';
+          document.getElementById(data).style.color=this.state.optionsButtons.LTE?'#373a47':'whitesmoke';
+          election.LTE =!this.state.optionsButtons.LTE;
+          this.setState({optionsButtons: election})
+          break;
+        case 'UMTS':
+          document.getElementById(data).style.background=!this.state.optionsButtons.UMTS?'#373a47':'whitesmoke';
+          document.getElementById(data).style.color=this.state.optionsButtons.UMTS?'#373a47':'whitesmoke';
+          election.UMTS =!this.state.optionsButtons.UMTS;
+          this.setState({optionsButtons: election})
+          break;
+      }
+      for (var i in election) {
+        if (election.hasOwnProperty(i)) {
+            if(election[i]){
+              electionArray.push(i)
+            }
+        }
+      }
+      // console.log('clickeados',electionArray)
+      this.setState({optionSelected:electionArray})
+
+    }
 
     render()  {
       const { markerPosition } = this.state;
@@ -209,9 +275,9 @@ class Mapaj extends Component {
                         {/* <div className="flex items-center justify-center flex-column vh-100"> */}
                           <div className='cf dib GrupButtons'>
                             {/* <p className="m0 f6 silver tc">Download</p> */}
-                            <a className="buttons f4 fl link bb bt bl ph3 pv2 dib br2 br--left bl" href="#0">Raw</a>
-                            <a className="buttons f4 fl link ba ph3 pv2 dib" href="#0">Gzipped</a>
-                            <a className="buttons f4 fl link bb bt ph3 pv2 dib br2 br--right br" href="#0">Minified</a>
+                            <button className="buttons  f4 fl link ba ph3 pv2 dib buttonLeft" id="CNT" onClick={()=>this.buttonsEvents('CNT')}>CNT EP</button>
+                            <button className="buttons f4 fl link ba ph3 pv2 dib" id="CONECEL" onClick={()=>this.buttonsEvents('CONECEL')}>CONECEL</button>
+                            <button className="buttons  f4 fl link ba ph3 pv2 dib buttonRight" id='OTECEL' onClick={()=>this.buttonsEvents('OTECEL')}>OTECEL</button>
                           </div>
                         {/* </div> */}
                   
@@ -227,22 +293,24 @@ class Mapaj extends Component {
                         {/* <div className="flex items-center justify-center flex-column vh-100"> */}
                           <div className='cf dib GrupButtons'>
                             {/* <p className="m0 f6 silver tc">Download</p> */}
-                            <a className="buttons f4 fl link bb bt bl ph3 pv2 dib br2 br--left bl" href="#0">Raw</a>
-                            <a className="buttons f4 fl link ba ph3 pv2 dib" href="#0">Gzipped</a>
-                            <a className="buttons f4 fl link bb bt ph3 pv2 dib br2 br--right br" href="#0">Minified</a>
+                            <button className="buttons  f4 fl link ba ph3 pv2 dib buttonLeft" id='GSM' onClick={()=>this.buttonsEvents('GSM')}>GSM</button>
+                            <button className="buttons f4 fl link ba ph3 pv2 dib" id='LTE' onClick={()=>this.buttonsEvents('LTE')}>LTE</button>
+                            <button className="buttons  f4 fl link ba ph3 pv2 dib buttonRight" id='UMTS' onClick={()=>this.buttonsEvents('UMTS')}>UMTS</button>
                           </div>
                         {/* </div> */}
                   
                 </Panel.Body>
               </Panel>
-                         
+                <div className="buttonPanel">
+                  <button className="f4 fl link ba ph3 pv2 dib buttonSubmit center" onClick={()=>this.buttonSubmint()}>Aceptar</button>        
+                </div>
 
               </Menu>
             </this.Column>
             <this.Column xs='12' sm='12' md='12'>
               <this.MapaScroll className='mapa' >
 
-              <Map markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)}/>
+              <Map markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)} optionsButtons={this.state.optionAcept}/>
           
               </this.MapaScroll>
             </this.Column>

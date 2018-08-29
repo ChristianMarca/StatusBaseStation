@@ -226,19 +226,19 @@ class CajaTxt extends React.Component {
       f7Value
     } = this.state;
     const f4InputProps = {
-      placeholder: "Name",
+      placeholder: "S719",
       value: f4Value,
       onChange: this.onf4Change,
       onKeyDown: this.onKeyDown,
     };
     const f8InputProps = {
-      placeholder: "City",
+      placeholder: "Cuenca Centro",
       value: f8Value,
       onChange: this.onf8Change,
       onKeyDown: this.onKeyDown,
     };
     const f7InputProps = {
-      placeholder: "f7",
+      placeholder: "El Rosario",
       value: f7Value,
       onChange: this.onf7Change,
       onKeyDown: this.onKeyDown,
