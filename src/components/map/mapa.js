@@ -18,8 +18,6 @@ import './map.css'
 import "leaflet-contextmenu/dist/leaflet.contextmenu.js"
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 
-import 'leaflet-dialog/Leaflet.Dialog.js'
-import 'leaflet-dialog/Leaflet.Dialog.css'
 
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
@@ -135,7 +133,7 @@ class Map extends React.Component {
   }
 
   // fetch('http://localhost:3000/data',{
-  fetch('http://192.168.1.102:3000/data_radiobase',{
+  fetch('http://localhost:3001/data_radiobase',{
     method: 'GET',
     headers: {'Content-Type': 'application/json'},
     // body: JSON.stringify({
@@ -356,7 +354,7 @@ componentWillReceiveProps(nextProps){
       })
     }
 
-    fetch('http://192.168.1.102:3000/filter_radiobase',{
+    fetch('http://localhost:3001/filter_radiobase',{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({

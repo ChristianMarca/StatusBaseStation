@@ -5,7 +5,7 @@ import 'tachyons'
 import {CajaTxt} from '../search/loc';
 import styled from "styled-components"
 import { bubble as Menu } from 'react-burger-menu';
-import {Navbar, NavItem, MenuItem, NavDropdown, Nav, Well, Button, Collapse,Clearfix, Panel} from 'react-bootstrap';
+import {Navbar, NavItem, MenuItem, NavDropdown, Nav,Panel} from 'react-bootstrap';
 import "leaflet-contextmenu/dist/leaflet.contextmenu.js"
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css";
 
@@ -210,7 +210,7 @@ class Mapaj extends Component {
 
       return (
    
-        <div class="container" id="outer-container" id='page-wrap'>
+        <div class="container" id="outer-container page-wrap">
           
           <this.Row> 
             <this.Header className="navContainer">

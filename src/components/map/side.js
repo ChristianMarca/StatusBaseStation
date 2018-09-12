@@ -1,5 +1,5 @@
 import React from 'react';
-import {Location, CajaTxt} from '../search/loc';
+import {CajaTxt} from '../search/loc';
 import './map.css';
 import 'tachyons';
 import L from "leaflet";
@@ -159,7 +159,6 @@ class Side extends React.Component {
     }
   }
   render(){
-    const {value}=this.props;
     // let elemento=<imageData existe={true}/>
     let elemento=<img src="http://tachyons.io/img/logo.jpg" className="br1 imageComponent" alt="avatar" />;
     return(
