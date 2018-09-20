@@ -2,43 +2,6 @@ import React from "react";
 import Autosuggest from "react-autosuggest/dist/Autosuggest";
 import './style.css'
 
-
-
-class Location extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
-    // console.log(this.state.value)
-    event.preventDefault();
-  }
-
-  render() {
-
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
-}
-
 class CajaTxt extends React.Component {
   constructor(props) {
     super(props);
@@ -66,6 +29,7 @@ class CajaTxt extends React.Component {
     //#fin vondiedo 1
     // this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
+
   componentWillReceiveProps(nextProps){
     // const {menuList}=this.props;
     // console.log('astisdsdff',menuList)
@@ -79,26 +43,26 @@ class CajaTxt extends React.Component {
   escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
-  
+
   getSuggestions(value) {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
-    
+
     return this.state.RadioBases.filter(user => regex.test(user.f4) || regex.test(user.f8) || regex.test(user.f7));
   }
-  
+
   getSuggestionf4(suggestion) {
     return String(suggestion.f4);
   }
-  
+
   getSuggestionf8(suggestion) {
     return String(suggestion.f8);
   }
-  
+
   getSuggestionf7(suggestion) {
     return String(suggestion.f7);
   }
-  
+
   renderSuggestion(suggestion) {
     return (
       <span>{suggestion.f4}/{suggestion.f8}/{suggestion.f7}</span>
@@ -128,7 +92,7 @@ class CajaTxt extends React.Component {
     event.preventDefault();
     event.stopPropagation();
   };
-  
+
   onf4SuggestionsFetchRequested = ({ value }) => {
     this.setState({
       f4Suggestions: this.getSuggestions(value)
@@ -194,7 +158,7 @@ class CajaTxt extends React.Component {
       f4Value: suggestion.f4,
       f7Value: String(suggestion.f7),
       informationValue: suggestion,
-      
+
     });
     this.props.locate(this.state.informationValue)
     event.preventDefault();
@@ -217,10 +181,10 @@ class CajaTxt extends React.Component {
 
   render() {
 
-    const { 
-      f4Value, 
-      f4Suggestions, 
-      f8Value, 
+    const {
+      f4Value,
+      f4Suggestions,
+      f8Value,
       f8Suggestions ,
       f7Suggestions,
       f7Value
@@ -244,12 +208,12 @@ class CajaTxt extends React.Component {
       onKeyDown: this.onKeyDown,
     };
 
-    return( 
-      
+    return(
+
       <div className="locationContainer">
         <h3>Estructura</h3>
         <Autosuggest
-          id="f4" 
+          id="f4"
           suggestions={f4Suggestions}
           onSuggestionsFetchRequested={this.onf4SuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onf4SuggestionsClearRequested}
@@ -259,7 +223,7 @@ class CajaTxt extends React.Component {
           inputProps={f4InputProps}
         />
         <h3>Dirección</h3>
-        <Autosuggest 
+        <Autosuggest
           id="f8"
           suggestions={f8Suggestions}
           onSuggestionsFetchRequested={this.onf8SuggestionsFetchRequested}
@@ -270,7 +234,7 @@ class CajaTxt extends React.Component {
           inputProps={f8InputProps}
         />
         <h3>Parroquia</h3>
-        <Autosuggest 
+        <Autosuggest
           id="f7"
           suggestions={f7Suggestions}
           onSuggestionsFetchRequested={this.onf7SuggestionsFetchRequested}
@@ -280,12 +244,11 @@ class CajaTxt extends React.Component {
           renderSuggestion={this.renderSuggestion}
           inputProps={f7InputProps}
         />
-     
+
       </div>
     )}
 }
 
 export {
-  Location,
   CajaTxt
 }
