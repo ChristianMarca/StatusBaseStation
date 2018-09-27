@@ -14,6 +14,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 import './map.css'
+import './clusters.css'
 
 import "leaflet-contextmenu/dist/leaflet.contextmenu.js"
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
@@ -21,7 +22,59 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
 
-var markers = L.markerClusterGroup({spiderfyOnMaxZoom: true, showCoverageOnHover: true, zoomToBoundsOnClick: true, removeOutsideVisibleBounds: true});
+var markers = L.markerClusterGroup({
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: true,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterOtecel',
+      iconSize: L.point(40, 40)
+    });
+  }
+});
+
+var markerConecel = L.markerClusterGroup({
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: true,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterConecel',
+      iconSize: L.point(40, 40)
+    });
+  }
+});
+var markerOtecel = L.markerClusterGroup({
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: true,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterOtecel',
+      iconSize: L.point(40, 40)
+    });
+  }
+});
+var markerCNT = L.markerClusterGroup({
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: true,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterCNT',
+      iconSize: L.point(40, 40)
+    });
+  }
+});
 
 class Map extends React.Component {
   constructor(props) {
@@ -157,7 +210,7 @@ class Map extends React.Component {
         onEachFeature: async function(feature, layer) {
 
           await layer.on('mouseover', () => {
-            layer.bindPopup(feature.properties.f15).openPopup();
+            layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
           })
           await layer.on('mouseout', () => {
             layer.closePopup();
@@ -317,7 +370,7 @@ class Map extends React.Component {
             onEachFeature: async function(feature, layer) {
 
               await layer.on('mouseover', () => {
-                layer.bindPopup(feature.properties.f15).openPopup();
+                layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
               })
               await layer.on('mouseout', () => {
                 layer.closePopup();
