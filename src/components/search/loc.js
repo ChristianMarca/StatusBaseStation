@@ -190,7 +190,7 @@ class CajaTxt extends React.Component {
       f7Value
     } = this.state;
     const f11InputProps = {
-      placeholder: "S719",
+      placeholder: "12345",
       value: f11Value,
       onChange: this.onf11Change,
       onKeyDown: this.onKeyDown,

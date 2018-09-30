@@ -169,6 +169,7 @@ class Map extends React.Component {
       return new Promise(resolve => {
         var _data = data.features.map(object => {
           dataObject = Object.assign(object.properties, object.geometry)
+          //console.log('esto ques',dataObject)
           return dataObject
         })
         //console.log('pruebna',_data);
@@ -191,22 +192,21 @@ class Map extends React.Component {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json()
-    ).then(datosnuev => datosnuev.jsonData
+  ).then(datosnuev => datosnuev.jsonData
     ).then(myData => {
 
       async function _getData(Data) {
         var _data = await getData(Data);
         return _data
       };
-
-      _getData(myData).then(datos => {
+      var rbTodo = Object.assign({},myData.conecel,myData.otecel,myData.cnt);
+      _getData(rbTodo).then(datos => {
         this.setState({dataToSearch: datos})
         handleData(datos)
-
         return datos
       });
 
-      let barLayer = L.geoJson(myData, {
+      let barLayerCon = L.geoJson(myData.conecel, {
         onEachFeature: async function(feature, layer) {
 
           await layer.on('mouseover', () => {
@@ -224,12 +224,57 @@ class Map extends React.Component {
         }
 
       })
-      console.log('prueba',barLayer);
-      return barLayer
+
+      let barLayerOte = L.geoJson(myData.otecel, {
+        onEachFeature: async function(feature, layer) {
+
+          await layer.on('mouseover', () => {
+            layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
+          })
+          await layer.on('mouseout', () => {
+            layer.closePopup();
+          })
+          await layer.on('click', () => {
+            if (sidebar.isVisible() == false){
+                sidebar.toggle();
+            }
+            handleClick(feature)
+          })
+        }
+
+      })
+
+      let barLayerCnt = L.geoJson(myData.cnt, {
+        onEachFeature: async function(feature, layer) {
+
+          await layer.on('mouseover', () => {
+            layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
+          })
+          await layer.on('mouseout', () => {
+            layer.closePopup();
+          })
+          await layer.on('click', () => {
+            if (sidebar.isVisible() == false){
+                sidebar.toggle();
+            }
+            handleClick(feature)
+          })
+        }
+
+      })
+      //console.log('prueba',barLayer);
+      return [barLayerCon, barLayerOte, barLayerCnt]
 
     }).then((barLayer) => {
-      markers.addLayer(barLayer);
-      this.map.addLayer(markers);
+      markerConecel.addLayer(barLayer[0]);
+      this.map.addLayer(markerConecel);
+
+      markerOtecel.addLayer(barLayer[1]);
+      this.map.addLayer(markerOtecel);
+
+      markerCNT.addLayer(barLayer[2]);
+      this.map.addLayer(markerCNT);
+
       document.getElementById("spinner").style.visibility = "hidden";
     }).catch(err => console.log(err))
     //Fin de funcion de pedido de datos
@@ -270,7 +315,7 @@ class Map extends React.Component {
     this.setState({value})
   }
   locate = (data) => {
-    console.log('La data retornada', data.coordinates)
+    //console.log('La data retornada', data.coordinates)
     this.setState({data: data})
     try {
       this.map.flyTo(L.latLng(data.coordinates[1], data.coordinates[0]), 18);
@@ -306,8 +351,8 @@ class Map extends React.Component {
     // console.log('next',nextProps.locate,'this', locate)
     if (nextProps.locate !== locate || locate || nextProps.locate) {
 
-      console.log('respondio')
-      console.log('La data retornada', locate.coordinates)
+      //console.log('respondio')
+      //console.log('La data retornada', locate.coordinates)
       this.setState({data: locate})
       try {
         this.map.flyTo(L.latLng(locate.coordinates[1], locate.coordinates[0]), 18);
@@ -319,15 +364,15 @@ class Map extends React.Component {
       }
 
     }
-    console.log('mm', optionsButtons, 'scnod', nextProps.optionsButtons)
     if (nextProps.optionsButtons !== optionsButtons) {
 
       this.setState({data: locate})
       document.getElementById("spinner").style.visibility = "visible";
       try {
-        markers.clearLayers();
-
-        function getData(data) {
+        markerConecel.clearLayers();
+        markerOtecel.clearLayers();
+        markerCNT.clearLayers();
+        /*function getData(data) {
           let dataObject = [];
           return new Promise((resolve, reject) => {
             try {
@@ -342,6 +387,22 @@ class Map extends React.Component {
             }
 
           })
+        }*/
+        function getData(data) {
+          let dataObject = [];
+          return new Promise((resolve, reject) => {
+            try {
+              var _data = data.features.map(object => {
+                dataObject = Object.assign(object.properties, object.geometry)
+                return dataObject
+              })
+              return resolve(_data);
+            } catch (e) {
+              //alert('No se encontro Resultados')
+              return reject({})
+            }
+
+          })
         }
 
         fetch('http://localhost:3001/filter_radiobase', {
@@ -349,23 +410,27 @@ class Map extends React.Component {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({provincia: nextProps.optionsButtons})
+          body: JSON.stringify({campos: nextProps.optionsButtons})
         }).then(response => {
           return response.json()
         }).then(jsonData => {
           return jsonData.jsonData;
         }).then(myData => {
 
+          var keys = Object.keys(myData);
+          var rbTodof = Object.assign({},myData.conecel,myData.otecel,myData.cnt);
+
           async function _getData(Data) {
             var _data = await getData(Data);
             return _data
           };
 
-          _getData(myData).then(datos => {
+          _getData(rbTodof).then(datos => {
             this.setState({dataToSearch: datos})
             handleData(datos)
             return datos
           });
+
           let barLayer = L.geoJson(myData, {
             onEachFeature: async function(feature, layer) {
 
@@ -389,7 +454,8 @@ class Map extends React.Component {
 
         }).then((barLayer) => {
           markers.addLayer(barLayer);
-          this.map.addLayer(markers)
+          this.map.addLayer(markers);
+
           document.getElementById("spinner").style.visibility = "hidden";
         }).catch(err => console.log(err))
 
@@ -402,7 +468,7 @@ class Map extends React.Component {
         }
 
         const sidebar = this.generate_sidebar('sidebar', 'right', false);
-        console.log('helloMUHNO', nextProps.optionsButtons)
+        console.log('Campos de filtros', nextProps.optionsButtons)
       } catch (err) {
         // console.log(err)
       }
