@@ -137,9 +137,24 @@ class Side extends React.Component {
       return '';
     }
   }
+
+  logoOperadora = () => {
+    switch (this.getOperadora()) {
+      case 'CONECEL':
+        return "/public/logoOp/claro-logo.png";
+      case 'OTECEL':
+        return "/public/logoOp/movistar-logo.png";
+      case 'CNT':
+        return "/public/logoOp/cnt-logo.png";
+      default:
+        break;
+    }
+  }
+
   render() {
+
     // let elemento=<imageData existe={true}/>
-    let elemento = <img src="http://tachyons.io/img/logo.jpg" className="br1 imageComponent" alt="avatar"/>;
+    let elemento = <img src="" className="br1 imageComponent" alt="avatar"/>;
     return (<div id="sidebar">
       <h1 className="title">Información</h1>
 
@@ -175,7 +190,7 @@ class Side extends React.Component {
       </ul>
     </div>)
   }
-} 
+}
 
 class SideMenu extends React.Component {
   constructor(props) {
@@ -262,7 +277,7 @@ class SideMenu extends React.Component {
 
   render() {
     const {menu} = this.props;
-    console.log('hubo un cambio', menu)
+    //console.log('hubo un cambio', menu)
     const {menuList} = this.props;
 
     const element = this._div.innerHTML = <CajaTxt className='menu' value={this.changeName} menuList={menuList} locate={this.locate}/>
@@ -281,7 +296,7 @@ class SideMenu extends React.Component {
         {/* { L.DomEvent.stopPropagation(this._event)} */}
 
         {console.log('Second Child', this._div)}
-        {this.innerHTML = <h1>Be OYURSELF</h1>}
+        {this.innerHTML = <h1>Be YOURSELF</h1>}
         <hr/>
         <div>
 

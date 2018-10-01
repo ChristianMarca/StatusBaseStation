@@ -22,20 +22,6 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
 
-var markers = L.markerClusterGroup({
-  spiderfyOnMaxZoom: true,
-  showCoverageOnHover: true,
-  zoomToBoundsOnClick: true,
-  removeOutsideVisibleBounds: true,
-  iconCreateFunction: function(cluster) {
-    return new L.DivIcon({
-      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
-      className: 'clusterOtecel',
-      iconSize: L.point(40, 40)
-    });
-  }
-});
-
 var markerConecel = L.markerClusterGroup({
   spiderfyOnMaxZoom: true,
   showCoverageOnHover: true,
@@ -148,7 +134,9 @@ class Map extends React.Component {
         }
       ]
 
-    }).setView([-1.574255, -78.441264], 6);
+    }).setView([
+      -1.574255, -78.441264
+    ], 6);
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       detectRetina: true,
@@ -191,15 +179,13 @@ class Map extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(response => response.json()
-  ).then(datosnuev => datosnuev.jsonData
-    ).then(myData => {
+    }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
 
       async function _getData(Data) {
         var _data = await getData(Data);
         return _data
       };
-      var rbTodo = Object.assign({},myData.conecel,myData.otecel,myData.cnt);
+      var rbTodo = Object.assign({}, myData.conecel, myData.otecel, myData.cnt);
       _getData(rbTodo).then(datos => {
         this.setState({dataToSearch: datos})
         handleData(datos)
@@ -210,14 +196,14 @@ class Map extends React.Component {
         onEachFeature: async function(feature, layer) {
 
           await layer.on('mouseover', () => {
-            layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
+            layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
           })
           await layer.on('mouseout', () => {
             layer.closePopup();
           })
           await layer.on('click', () => {
-            if (sidebar.isVisible() == false){
-                sidebar.toggle();
+            if (sidebar.isVisible() == false) {
+              sidebar.toggle();
             }
             handleClick(feature)
           })
@@ -229,14 +215,14 @@ class Map extends React.Component {
         onEachFeature: async function(feature, layer) {
 
           await layer.on('mouseover', () => {
-            layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
+            layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
           })
           await layer.on('mouseout', () => {
             layer.closePopup();
           })
           await layer.on('click', () => {
-            if (sidebar.isVisible() == false){
-                sidebar.toggle();
+            if (sidebar.isVisible() == false) {
+              sidebar.toggle();
             }
             handleClick(feature)
           })
@@ -248,14 +234,14 @@ class Map extends React.Component {
         onEachFeature: async function(feature, layer) {
 
           await layer.on('mouseover', () => {
-            layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
+            layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
           })
           await layer.on('mouseout', () => {
             layer.closePopup();
           })
           await layer.on('click', () => {
-            if (sidebar.isVisible() == false){
-                sidebar.toggle();
+            if (sidebar.isVisible() == false) {
+              sidebar.toggle();
             }
             handleClick(feature)
           })
@@ -369,6 +355,7 @@ class Map extends React.Component {
       this.setState({data: locate})
       document.getElementById("spinner").style.visibility = "visible";
       try {
+        //markers.clearLayers();
         markerConecel.clearLayers();
         markerOtecel.clearLayers();
         markerCNT.clearLayers();
@@ -416,45 +403,69 @@ class Map extends React.Component {
         }).then(jsonData => {
           return jsonData.jsonData;
         }).then(myData => {
-
+          //keys = [];
           var keys = Object.keys(myData);
-          var rbTodof = Object.assign({},myData.conecel,myData.otecel,myData.cnt);
+          var acumm = {};
+          console.log('llaves', keys)
 
           async function _getData(Data) {
             var _data = await getData(Data);
             return _data
           };
 
-          _getData(rbTodof).then(datos => {
+          var layersComplete = keys.map((actual, indice)=> {
+
+            Object.assign(acumm, myData[keys[indice]])
+            console.log('no me sale',actual,myData[keys[indice]])
+
+            let barLayer = L.geoJson(myData[keys[indice]], {
+              onEachFeature: async function(feature, layer) {
+
+                await layer.on('mouseover', () => {
+                  layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
+                })
+                await layer.on('mouseout', () => {
+                  layer.closePopup();
+                })
+                await layer.on('click', () => {
+                  if (sidebar.isVisible() == false) {
+                    sidebar.toggle();
+                  }
+                  handleClick(feature)
+                })
+              }
+
+            });
+
+            return barLayer
+          })
+
+          _getData(acumm).then(datos => {
             this.setState({dataToSearch: datos})
             handleData(datos)
             return datos
           });
-
-          let barLayer = L.geoJson(myData, {
-            onEachFeature: async function(feature, layer) {
-
-              await layer.on('mouseover', () => {
-                layer.bindPopup('Cell ID: '+feature.properties.f11).openPopup();
-              })
-              await layer.on('mouseout', () => {
-                layer.closePopup();
-              })
-              await layer.on('click', () => {
-                if (sidebar.isVisible() == false){
-                    sidebar.toggle();
-                }
-                handleClick(feature)
-              })
+          var completo = {layers:layersComplete, llaves:keys}
+          return completo
+        }).then(completo => {
+          //console.log(layersComplete)
+          completo.llaves.map((actual,indice)=>{
+            console.log('ya quiero terminar',completo.layers)
+            if(actual=="CONECEL"){
+              markerConecel.addLayer(completo.layers[indice]);
+              this.map.addLayer(markerConecel);
+            }
+            if(actual=="OTECEL"){
+              markerOtecel.addLayer(completo.layers[indice]);
+              this.map.addLayer(markerOtecel);
+            }
+            if(actual=="CNT"){
+              markerCNT.addLayer(completo.layers[indice]);
+              this.map.addLayer(markerCNT);
             }
 
           })
 
-          return barLayer
-
-        }).then((barLayer) => {
-          markers.addLayer(barLayer);
-          this.map.addLayer(markers);
 
           document.getElementById("spinner").style.visibility = "hidden";
         }).catch(err => console.log(err))
@@ -468,7 +479,7 @@ class Map extends React.Component {
         }
 
         const sidebar = this.generate_sidebar('sidebar', 'right', false);
-        console.log('Campos de filtros', nextProps.optionsButtons)
+        //console.log('Campos de filtros', nextProps.optionsButtons)
       } catch (err) {
         // console.log(err)
       }
