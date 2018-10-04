@@ -137,9 +137,29 @@ class Side extends React.Component {
       return '';
     }
   }
+
+  logoOperadora = () => {
+    var path = "";
+    switch (this.getOperadora()) {
+      case 'CONECEL':
+        path = "../../../logoOp/claro-logo.png";
+        break;
+      case 'OTECEL':
+        path = "../../../logoOp/movistar-logo.png";
+        break;
+      case 'CNT':
+        path = "../../../logoOp/cnt-logo.png";
+        break;
+      default:
+        break;
+    }
+    return path;
+  }
+
   render() {
+
     // let elemento=<imageData existe={true}/>
-    let elemento = <img src="http://tachyons.io/img/logo.jpg" className="br1 imageComponent" alt="avatar"/>;
+    let elemento = <img src={this.logoOperadora()} className="br1 imageComponent" alt="avatar"/>;
     return (<div id="sidebar">
       <h1 className="title">Información</h1>
 
@@ -151,10 +171,6 @@ class Side extends React.Component {
           <div class="center br2 ba cardComponent">
             <h4 class="white mv0 pv2 ph3 titleCardComponent">Radio Base</h4>
             <div class="pa3 bt center">
-              {/* <p class="f5-ns lh-copy measure mv0"> */}
-              {/* <h6 className="informationCard">Lorem ipsum dolor sit amet.
-                  </h6> */
-              }
               <ListComponent title={'Cell ID'} content={this.getCellID()}/>
               <ListComponent title={'Provincia'} content={this.getProvincia()}/>
               <ListComponent title={'Canton'} content={this.getCanton()}/>
@@ -166,16 +182,14 @@ class Side extends React.Component {
               <ListComponent title={'Status'} content={this.getStatus()}/>
               <ListComponent title={'Coordenadas'} content={this.getCoodenadas()}/>
               <ListComponent title={'Estructura'} content={this.getEstructura()}/>
-              <ListComponent title={'Estructura ID'} content={this.getEstructura_id()}/> {/* <ListComponent title={'Titulo'} content={'AQUI LA informacon'} /> */}
-
-              {/* </p> */}
+              <ListComponent title={'Estructura ID'} content={this.getEstructura_id()}/>
             </div>
           </div>
         </li>
       </ul>
     </div>)
   }
-} 
+}
 
 class SideMenu extends React.Component {
   constructor(props) {
@@ -262,7 +276,7 @@ class SideMenu extends React.Component {
 
   render() {
     const {menu} = this.props;
-    console.log('hubo un cambio', menu)
+    //console.log('hubo un cambio', menu)
     const {menuList} = this.props;
 
     const element = this._div.innerHTML = <CajaTxt className='menu' value={this.changeName} menuList={menuList} locate={this.locate}/>
@@ -281,7 +295,7 @@ class SideMenu extends React.Component {
         {/* { L.DomEvent.stopPropagation(this._event)} */}
 
         {console.log('Second Child', this._div)}
-        {this.innerHTML = <h1>Be OYURSELF</h1>}
+        {this.innerHTML = <h1>Be YOURSELF</h1>}
         <hr/>
         <div>
 

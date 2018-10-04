@@ -10,8 +10,8 @@ class CajaTxt extends React.Component {
       value: '',
       suggestions: [],
 
-      f4Value: '',
-      f4Suggestions: [],
+      f11Value: '',
+      f11Suggestions: [],
       f8Value: '',
       f8Suggestions: [],
       f7Value: '',
@@ -48,11 +48,11 @@ class CajaTxt extends React.Component {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
 
-    return this.state.RadioBases.filter(user => regex.test(user.f4) || regex.test(user.f8) || regex.test(user.f7));
+    return this.state.RadioBases.filter(user => regex.test(user.f11) || regex.test(user.f8) || regex.test(user.f7));
   }
 
-  getSuggestionf4(suggestion) {
-    return String(suggestion.f4);
+  getSuggestionf11(suggestion) {
+    return String(suggestion.f11);
   }
 
   getSuggestionf8(suggestion) {
@@ -65,13 +65,13 @@ class CajaTxt extends React.Component {
 
   renderSuggestion(suggestion) {
     return (
-      <span>{suggestion.f4}/{suggestion.f8}/{suggestion.f7}</span>
+      <span>{suggestion.f11}/{suggestion.f8}/{suggestion.f7}</span>
     );
   }
 
-  onf4Change = (event, { newValue }) => {
+  onf11Change = (event, { newValue }) => {
     this.setState({
-      f4Value: newValue
+      f11Value: newValue
     });
     event.preventDefault();
     event.stopPropagation();
@@ -93,19 +93,19 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
-  onf4SuggestionsFetchRequested = ({ value }) => {
+  onf11SuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f4Suggestions: this.getSuggestions(value)
+      f11Suggestions: this.getSuggestions(value)
     });
   };
 
-  onf4SuggestionsClearRequested = (event) => {
+  onf11SuggestionsClearRequested = (event) => {
     this.setState({
-      f4Suggestions: []
+      f11Suggestions: []
     });
   };
 
-  onf4SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  onf11SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     console.log(method)
     this.setState({
       f8Value: suggestion.f8,
@@ -133,7 +133,7 @@ class CajaTxt extends React.Component {
     console.log(method)
     this.setState({
       f8Value: suggestion.f8,
-      f4Value: suggestion.f4,
+      f11Value: suggestion.f11,
       informationValue: suggestion,
     });
     this.props.locate(this.state.informationValue)
@@ -155,7 +155,7 @@ class CajaTxt extends React.Component {
 
   onf8SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     this.setState({
-      f4Value: suggestion.f4,
+      f11Value: suggestion.f11,
       f7Value: String(suggestion.f7),
       informationValue: suggestion,
 
@@ -182,17 +182,17 @@ class CajaTxt extends React.Component {
   render() {
 
     const {
-      f4Value,
-      f4Suggestions,
+      f11Value,
+      f11Suggestions,
       f8Value,
       f8Suggestions ,
       f7Suggestions,
       f7Value
     } = this.state;
-    const f4InputProps = {
-      placeholder: "S719",
-      value: f4Value,
-      onChange: this.onf4Change,
+    const f11InputProps = {
+      placeholder: "12345",
+      value: f11Value,
+      onChange: this.onf11Change,
       onKeyDown: this.onKeyDown,
     };
     const f8InputProps = {
@@ -211,16 +211,16 @@ class CajaTxt extends React.Component {
     return(
 
       <div className="locationContainer">
-        <h3>Estructura</h3>
+        <h3>Cell ID</h3>
         <Autosuggest
-          id="f4"
-          suggestions={f4Suggestions}
-          onSuggestionsFetchRequested={this.onf4SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf4SuggestionsClearRequested}
-          onSuggestionSelected={this.onf4SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf4}
+          id="f11"
+          suggestions={f11Suggestions}
+          onSuggestionsFetchRequested={this.onf11SuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onf11SuggestionsClearRequested}
+          onSuggestionSelected={this.onf11SuggestionSelected}
+          getSuggestionValue={this.getSuggestionf11}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f4InputProps}
+          inputProps={f11InputProps}
         />
         <h3>Dirección</h3>
         <Autosuggest

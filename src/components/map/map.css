@@ -295,8 +295,8 @@ cursor: pointer; */
     }
     
     .imageComponent {
-        width: 20%;
-        height: 20%;
+        width: auto;
+        height: 50px;
         padding-top: 5px;
         border-radius: 10px;
     }
