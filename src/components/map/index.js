@@ -231,6 +231,8 @@ class Mapaj extends Component {
                 election.UMTS = !this.state.optionsButtons.UMTS;
                 this.setState({optionsButtons: election})
                 break;
+                default:
+                break;
             }
             for (var i in election) {
               if (election.hasOwnProperty(i)) {
@@ -247,12 +249,12 @@ class Mapaj extends Component {
           render() {
             const {markerPosition} = this.state;
 
-            return (<div class="container" id="outer-container page-wrap">
+            return (<div className="container" id="outer-container page-wrap">
 
               <this.Row>
                 <this.Header className="navContainer">
 
-                  <Navbar inverse="inverse" collapseOnSelect="collapseOnSelect">
+                  <Navbar inverse={true} collapseOnSelect={true}>
                     <Navbar.Header>
                       <Navbar.Brand>
                         <a href="https://github.com/ChristianMarca">
@@ -270,11 +272,11 @@ class Mapaj extends Component {
                           <MenuItem eventKey={3.1}>About</MenuItem>
                           <MenuItem eventKey={3.2}>Instructivo</MenuItem>
                           <MenuItem eventKey={3.3}>Documentación</MenuItem>
-                          <MenuItem divider="divider"/>
+                          <MenuItem divider={true}/>
                           <MenuItem eventKey={3.3}>Desarrollador</MenuItem>
                         </NavDropdown>
                       </Nav>
-                      <Nav pullRight="pullRight">
+                      <Nav pullRight={true}>
                         <NavItem eventKey={2} href="https://christianmarca.github.io/practice_page.github.io/">
                           DEV
                         </NavItem>

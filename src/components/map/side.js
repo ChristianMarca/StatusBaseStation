@@ -22,11 +22,11 @@ class Side extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {dataSearch} = this.props;
-    console.log('next', nextProps.dataSearch, 'this', dataSearch)
+    //console.log('next', nextProps.dataSearch, 'this', dataSearch)
     if (nextProps.dataSearch !== dataSearch || dataSearch) {
 
       this.setState({BaseStations: nextProps.dataSearch})
-      console.log('nuevo esatdor', nextProps.dataSearch)
+      //console.log('nuevo esatdor', nextProps.dataSearch)
       // const {value, dataSearch}=this.props;
       // console.log('asdd',this.props.dataSearch)
       try {
@@ -168,9 +168,9 @@ class Side extends React.Component {
         <li className="info ph3 pv2 bb">{elemento}</li>
 
         <li className="info ph3 pv2 bb">
-          <div class="center br2 ba cardComponent">
-            <h4 class="white mv0 pv2 ph3 titleCardComponent">Radio Base</h4>
-            <div class="pa3 bt center">
+          <div className="center br2 ba cardComponent">
+            <h4 className="white mv0 pv2 ph3 titleCardComponent">Radio Base</h4>
+            <div className="pa3 bt center">
               <ListComponent title={'Cell ID'} content={this.getCellID()}/>
               <ListComponent title={'Provincia'} content={this.getProvincia()}/>
               <ListComponent title={'Canton'} content={this.getCanton()}/>
@@ -275,11 +275,11 @@ class SideMenu extends React.Component {
   // },
 
   render() {
-    const {menu} = this.props;
+    //const {menu} = this.props;
     //console.log('hubo un cambio', menu)
     const {menuList} = this.props;
 
-    const element = this._div.innerHTML = <CajaTxt className='menu' value={this.changeName} menuList={menuList} locate={this.locate}/>
+    const element = this._div.innerHTML = <CajaTxt className='menu' value={this.changeName.toString()} menuList={menuList} locate={this.locate}/>
     const eleme = <button onClick={this.handleOpenModal}>Trigger Modal</button>
     // this. _disableClickPropagation(eleme)
     // L.DomEvent.stopPropagation(element);
@@ -288,13 +288,7 @@ class SideMenu extends React.Component {
       <div id="sidebar_menu">
 
         <h1 className="title">Buscar BS</h1>
-        {/* <Location value={this.state.nameSideMenu}/>
-    <h2>{this.state.nameSideMenu}</h2> */
-        }
         {element}
-        {/* { L.DomEvent.stopPropagation(this._event)} */}
-
-        {console.log('Second Child', this._div)}
         {this.innerHTML = <h1>Be YOURSELF</h1>}
         <hr/>
         <div>
