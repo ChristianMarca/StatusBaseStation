@@ -135,7 +135,7 @@ class Map extends React.Component {
       ]
 
     }).setView([
-      -1.574255, -78.441264
+      -1.574255, -81
     ], 6);
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -185,7 +185,11 @@ class Map extends React.Component {
         var _data = await getData(Data);
         return _data
       };
-      var rbTodo = Object.assign({}, myData.conecel, myData.otecel, myData.cnt);
+      var rbTodo = {
+        features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
+        type: "FeatureCollection"
+      }
+      //console.log('que es todo', myData.conecel.features.length,myData.otecel.features.length,myData.cnt.features.length, rbTodo.features.length)
       _getData(rbTodo).then(datos => {
         this.setState({dataToSearch: datos})
         handleData(datos)
@@ -202,7 +206,7 @@ class Map extends React.Component {
             layer.closePopup();
           })
           await layer.on('click', () => {
-            if (sidebar.isVisible() == false) {
+            if (sidebar.isVisible() === false) {
               sidebar.toggle();
             }
             handleClick(feature)
@@ -221,7 +225,7 @@ class Map extends React.Component {
             layer.closePopup();
           })
           await layer.on('click', () => {
-            if (sidebar.isVisible() == false) {
+            if (sidebar.isVisible() === false) {
               sidebar.toggle();
             }
             handleClick(feature)
@@ -240,7 +244,7 @@ class Map extends React.Component {
             layer.closePopup();
           })
           await layer.on('click', () => {
-            if (sidebar.isVisible() == false) {
+            if (sidebar.isVisible() === false) {
               sidebar.toggle();
             }
             handleClick(feature)
@@ -359,22 +363,7 @@ class Map extends React.Component {
         markerConecel.clearLayers();
         markerOtecel.clearLayers();
         markerCNT.clearLayers();
-        /*function getData(data) {
-          let dataObject = [];
-          return new Promise((resolve, reject) => {
-            try {
-              var _data = data.features.map(object => {
-                dataObject = Object.assign(object.properties, object.geometry)
-                return dataObject
-              })
-              return resolve(_data);
-            } catch (e) {
-              alert('No se encontro Resultados')
-              return reject({})
-            }
 
-          })
-        }*/
         function getData(data) {
           let dataObject = [];
           return new Promise((resolve, reject) => {
@@ -405,20 +394,29 @@ class Map extends React.Component {
         }).then(myData => {
           //keys = [];
           var keys = Object.keys(myData);
-          var acumm = {};
-          console.log('llaves', keys)
+          var acumm = [];
+          //console.log('llaves', keys)
+          //console.log(myData)
 
           async function _getData(Data) {
+            try{
             var _data = await getData(Data);
             return _data
+          }catch (e){
+            return e
+          }
           };
 
           var layersComplete = keys.map((actual, indice)=> {
+            //(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features))
+            if (myData[keys[indice]]['features']!==null){
+              acumm = acumm.concat(myData[keys[indice]]['features'])
+            }
 
-            Object.assign(acumm, myData[keys[indice]])
-            console.log('no me sale',actual,myData[keys[indice]])
+            //console.log('Acumulador',acumm)
+            //console.log('Datos',myData[keys[indice]]['features'])
 
-            let barLayer = L.geoJson(myData[keys[indice]], {
+            let barLayer = L.geoJson(myData[keys[indice]]['features'], {
               onEachFeature: async function(feature, layer) {
 
                 await layer.on('mouseover', () => {
@@ -428,7 +426,7 @@ class Map extends React.Component {
                   layer.closePopup();
                 })
                 await layer.on('click', () => {
-                  if (sidebar.isVisible() == false) {
+                  if (sidebar.isVisible() === false) {
                     sidebar.toggle();
                   }
                   handleClick(feature)
@@ -439,8 +437,12 @@ class Map extends React.Component {
 
             return barLayer
           })
-
-          _getData(acumm).then(datos => {
+          var rbTodo = {
+            features: acumm,
+            type: "FeatureCollection"
+          }
+          console.log('hola',rbTodo)
+          _getData(rbTodo).then(datos => {
             this.setState({dataToSearch: datos})
             handleData(datos)
             return datos
@@ -450,16 +452,16 @@ class Map extends React.Component {
         }).then(completo => {
           //console.log(layersComplete)
           completo.llaves.map((actual,indice)=>{
-            console.log('ya quiero terminar',completo.layers)
-            if(actual=="CONECEL"){
+            //console.log('ya quiero terminar',completo.layers)
+            if(actual==="CONECEL"){
               markerConecel.addLayer(completo.layers[indice]);
               this.map.addLayer(markerConecel);
             }
-            if(actual=="OTECEL"){
+            if(actual==="OTECEL"){
               markerOtecel.addLayer(completo.layers[indice]);
               this.map.addLayer(markerOtecel);
             }
-            if(actual=="CNT"){
+            if(actual==="CNT"){
               markerCNT.addLayer(completo.layers[indice]);
               this.map.addLayer(markerCNT);
             }

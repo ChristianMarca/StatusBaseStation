@@ -10,6 +10,8 @@ class CajaTxt extends React.Component {
       value: '',
       suggestions: [],
 
+      f4Value: '',
+      f4Suggestions: [],
       f11Value: '',
       f11Suggestions: [],
       f8Value: '',
@@ -37,7 +39,7 @@ class CajaTxt extends React.Component {
     this.setState({RadioBases: nextProps.menuList})
 
   // console.log('Casi al fina',this.state.RadioBases)
-    console.log('radiobases',this.state.RadioBases)
+    //console.log('radiobases',this.state.RadioBases)
   }
 
   escapeRegexCharacters(str) {
@@ -48,7 +50,11 @@ class CajaTxt extends React.Component {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
 
-    return this.state.RadioBases.filter(user => regex.test(user.f11) || regex.test(user.f8) || regex.test(user.f7));
+    return this.state.RadioBases.filter(user => regex.test(user.f4) || regex.test(user.f11) || regex.test(user.f8) || regex.test(user.f7));
+  }
+
+  getSuggestionf4(suggestion) {
+    return String(suggestion.f4);
   }
 
   getSuggestionf11(suggestion) {
@@ -65,9 +71,17 @@ class CajaTxt extends React.Component {
 
   renderSuggestion(suggestion) {
     return (
-      <span>{suggestion.f11}/{suggestion.f8}/{suggestion.f7}</span>
+      <span>{suggestion.f4}/{suggestion.f11}/{suggestion.f8}/{suggestion.f7}</span>
     );
   }
+
+  onf4Change = (event, { newValue }) => {
+    this.setState({
+      f4Value: newValue
+    });
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   onf11Change = (event, { newValue }) => {
     this.setState({
@@ -93,6 +107,31 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
+  onf4SuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      f4Suggestions: this.getSuggestions(value)
+    });
+  };
+
+  onf4SuggestionsClearRequested = () => {
+    this.setState({
+      f4Suggestions: []
+    });
+  };
+
+  onf4SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+    this.setState({
+      f11Value: String(suggestion.f11),
+      f8Value: String(suggestion.f8),
+      f7Value: String(suggestion.f7),
+      informationValue: suggestion,
+
+    });
+    this.props.locate(this.state.informationValue)
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   onf11SuggestionsFetchRequested = ({ value }) => {
     this.setState({
       f11Suggestions: this.getSuggestions(value)
@@ -106,9 +145,10 @@ class CajaTxt extends React.Component {
   };
 
   onf11SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-    console.log(method)
+    //console.log(method)
     this.setState({
-      f8Value: suggestion.f8,
+      f4Value: String(suggestion.f4),
+      f8Value: String(suggestion.f8),
       f7Value: String(suggestion.f7),
       informationValue: suggestion,
     });
@@ -130,10 +170,11 @@ class CajaTxt extends React.Component {
   };
 
   onf7SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-    console.log(method)
+    //console.log(method)
     this.setState({
-      f8Value: suggestion.f8,
-      f11Value: suggestion.f11,
+      f4Value: String(suggestion.f4),
+      f8Value: String(suggestion.f8),
+      f11Value: String(suggestion.f11),
       informationValue: suggestion,
     });
     this.props.locate(this.state.informationValue)
@@ -155,7 +196,8 @@ class CajaTxt extends React.Component {
 
   onf8SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     this.setState({
-      f11Value: suggestion.f11,
+      f4Value: String(suggestion.f4),
+      f11Value: String(suggestion.f11),
       f7Value: String(suggestion.f7),
       informationValue: suggestion,
 
@@ -182,6 +224,8 @@ class CajaTxt extends React.Component {
   render() {
 
     const {
+      f4Value,
+      f4Suggestions,
       f11Value,
       f11Suggestions,
       f8Value,
@@ -189,6 +233,12 @@ class CajaTxt extends React.Component {
       f7Suggestions,
       f7Value
     } = this.state;
+    const f4InputProps = {
+      placeholder: "Cuenca",
+      value: f4Value,
+      onChange: this.onf4Change,
+      onKeyDown: this.onKeyDown,
+    };
     const f11InputProps = {
       placeholder: "12345",
       value: f11Value,
@@ -211,6 +261,17 @@ class CajaTxt extends React.Component {
     return(
 
       <div className="locationContainer">
+        <h3>Estructura</h3>
+        <Autosuggest
+          id="f4"
+          suggestions={f4Suggestions}
+          onSuggestionsFetchRequested={this.onf4SuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onf4SuggestionsClearRequested}
+          onSuggestionSelected={this.onf4SuggestionSelected}
+          getSuggestionValue={this.getSuggestionf4}
+          renderSuggestion={this.renderSuggestion}
+          inputProps={f4InputProps}
+        />
         <h3>Cell ID</h3>
         <Autosuggest
           id="f11"

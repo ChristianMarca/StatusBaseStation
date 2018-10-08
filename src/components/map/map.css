@@ -1,7 +1,7 @@
     /* .container {
     height: 100%;
 } */
-    
+
     #map {
         /* // background-color: 'green'; */
         /* height: '100vh'; */
@@ -11,7 +11,7 @@
         /* width: '100px';
 height: 100vh; */
     }
-    
+
     .navContainer {
         /* // display: flex;
             //  flex-direction: row;
@@ -20,7 +20,7 @@ height: 100vh; */
             //  justify-content: space-around; */
         width: 100%;
     }
-    
+
     .collapseMenu1 {
         right: 15px;
         color: white;
@@ -29,7 +29,7 @@ height: 100vh; */
         background: #373a47;
         /* // width: 100%; */
     }
-    
+
     @media only screen and (max-width: 768px) {
         .collapseMenu1 {
             right: 15px;
@@ -40,7 +40,7 @@ height: 100vh; */
             width: 100%;
         }
     }
-    
+
     .navContainer .collapseMenu2 {
         /* // display: block;
             // z-index: 1;
@@ -54,23 +54,23 @@ height: 100vh; */
             // position: absolute; */
         justify-content: flex-end;
     }
-    
+
     .mapa {
         padding-right: 3px;
     }
-    
+
     .Columna {
         width: 1000px;
         display: flex;
     }
-    
+
     .navbar-header {
         /* // background-color: #F16E10; */
         border: 0px;
         margin: 0px;
         padding: 0px;
     }
-    
+
     .navbar-collapse {
         color: red;
         font-size: 20px;
@@ -78,7 +78,7 @@ height: 100vh; */
         padding: 0px;
         color: red;
     }
-    
+
     .info {
         text-align: center;
         /* text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);
@@ -88,13 +88,13 @@ height: 100vh; */
             border: 0px solid #000000; */
     }
     /* Position and sizing of burger button */
-    
+
     .bm-menu-wrap,
     .bm-overlay {
         top: 0;
         left: 0;
     }
-    
+
     .bm-burger-button {
         position: fixed;
         width: 0px;
@@ -103,28 +103,28 @@ height: 100vh; */
         top: 0px;
     }
     /* Color/shape of burger icon bars */
-    
+
     .bm-burger-bars {
         background: #373a47;
     }
     /* Position and sizing of clickable cross button */
-    
+
     .bm-cross-button {
         position: fixed;
         /* // height: 24px;
             // width: 24px; */
     }
-    
+
     .bm-morph-shape {
         fill: #373a47;
     }
     /* Color/shape of close button cross */
-    
+
     .bm-cross {
         background: #bdc3c7;
     }
     /* General sidebar styles */
-    
+
     .bm-menu {
         background: #373a47;
         padding: 3em 0.9em 0em 0.9em;
@@ -132,24 +132,24 @@ height: 100vh; */
         width: 100%;
     }
     /* Morph shape necessary with bubble or elastic */
-    
+
     .bm-morph-shape {
         fill: #373a47;
     }
     /* Wrapper for item list */
-    
+
     .bm-item-list {
         color: #b8b7ad;
         /* // padding: 0.8em; */
         width: 100%;
     }
     /* Individual item */
-    
+
     .bm-item {
         display: inline-block;
     }
     /* Styling of overlay */
-    
+
     .bm-overlay {
         background: rgba(0, 0, 0, 0.3);
     }
@@ -158,7 +158,7 @@ height: 100vh; */
     top: 0;
     left: 0;
 } */
-    
+
     .react-autosuggest__input {
         /* position: absolute;
 right: 40px;
@@ -176,7 +176,7 @@ cursor: pointer;
 z-index: 1000;
 transition: 0.5s; */
     }
-    
+
     .react-autosuggest__suggestions-list,
     react-autosuggest__suggestions-container react-autosuggest__suggestions-container--open {
         /* position: absolute; */
@@ -196,52 +196,52 @@ cursor: pointer; */
         /* transition: 0.5s; */
     }
     /* //Contenedores de  Grup button */
-    
+
     .selection {
         width: 100%;
         height: 10px;
         background: red;
     }
-    
+
     .panel {
         width: 100%;
         position: relative;
     }
-    
+
     .panelHead {
         background: #373a47;
     }
-    
+
     .GrupButtons {
         display: flex;
         justify-content: center;
     }
-    
+
     .panelTitle {
         color: whitesmoke;
     }
-    
+
     .buttons {
         background: whitesmoke;
         color: #373a47;
         border-top-color: #373a47;
         border-bottom-color: #373a47;
     }
-    
+
     .buttonRight {
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
         border-right-color: #373a47;
         border-left-color: #373a47;
     }
-    
+
     .buttonLeft {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
         border-right-color: #373a47;
         border-left-color: #373a47;
     }
-    
+
     .buttonSubmit {
         border-radius: 5px;
         border-color: #7c8195;
@@ -251,23 +251,23 @@ cursor: pointer; */
         text-align: center;
         justify-content: center;
     }
-    
+
     .buttonPanel {
         width: 100%;
         position: relative;
         /* display: flex; */
     }
-    
+
     .buttonSubmit:hover {
         background: #7c8195;
         color: whitesmoke;
     }
-    
+
     .buttons:hover {
         background: #373a47;
         color: whitesmoke;
     }
-    
+
     .cardComponent {
         width: 100%;
         height: 100%;
@@ -281,44 +281,44 @@ cursor: pointer; */
         /* margin-right: 10px;
         margin-left: 10px; */
     }
-    
+
     .informationContainer {
         width: 100%;
         height: 78vh;
         text-align: center;
     }
-    
+
     .titleCardComponent {
         border-top-right-radius: 5px;
         border-top-left-radius: 5px;
         background: #373a47;
     }
-    
+
     .imageComponent {
         width: auto;
         height: 50px;
         padding-top: 5px;
         border-radius: 10px;
     }
-    
+
     .superCard {
         display: flex;
         flex-direction: row;
     }
-    
+
     .title {
         text-align: center;
         font-size: 30px;
         color: whitesmoke;
         /* text-shadow: 4px 4px 2px rgba(150, 150, 150, 1); */
     }
-    
+
     .informationCard {
         color: whitesmoke;
         text-align: center;
         color: #373a47;
     }
-    
+
     @media only screen and (max-width: 768px) {
         .title {
             font-size: 20px
@@ -332,29 +332,29 @@ cursor: pointer; */
             overflow: scroll;
         }
     }
-    
+
     .shadow-sm {
         box-shadow: 0px 0px 4px 2px rgba( 0, 0, 0, 0.2)
     }
-    
+
     .special-border {
         border: 1px solid;
         border-color: #e5e6e9 #dfe0e4 #d0d1d5;
         border-radius: 3px;
     }
-    
+
     .border-3color {
         border-color: #e5e6e9 #dfe0e4 #d0d1d5;
     }
-    
+
     .contentListItem {
         font-size: 12px;
     }
-    
+
     .contentListHead {
         font-size: 13px;
     }
-    
+
     .loader {
         border: 16px solid #f3f3f3;
         border-radius: 50%;
@@ -370,7 +370,7 @@ cursor: pointer; */
         z-index: 2000;
     }
     /* Safari */
-    
+
     @-webkit-keyframes spin {
         0% {
             -webkit-transform: rotate(0deg);
@@ -379,7 +379,7 @@ cursor: pointer; */
             -webkit-transform: rotate(360deg);
         }
     }
-    
+
     @keyframes spin {
         0% {
             transform: rotate(0deg);
