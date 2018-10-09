@@ -19,7 +19,7 @@ L.Control.Sidebar = L.Control.extend({
 
         // Find content container
         var content = this._contentContainer = L.DomUtil.get(placeholder);
-        console.log('contenido',content)
+        //console.log('contenido',content)
 
         // Remove the content container from its original parent
         content.parentNode.removeChild(content);
@@ -46,7 +46,7 @@ L.Control.Sidebar = L.Control.extend({
             // alert(this.options.componente)
             menu.innerHTML=this.options.componente
         }
-        
+
     },
 
     addTo: function (map) {
@@ -92,7 +92,7 @@ L.Control.Sidebar = L.Control.extend({
             .on(content, 'MozMousePixelScroll', stop);
 
         return this;
-        
+
     },
 
     removeFrom: function (map) {

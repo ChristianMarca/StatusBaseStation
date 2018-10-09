@@ -4,7 +4,7 @@ import 'leaflet.locatecontrol';
 import 'tachyons'
 import '../../plugins/leaflet-sidebar';
 import '../../plugins/leaflet-sidebar/src/L.Control.Sidebar.css';
-import {Side,SideMenu} from './side';
+import {Side} from './side';
 
 import '../../plugins/menu';
 import '../../plugins/menu/style.css'
@@ -14,35 +14,67 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 import './map.css'
+import './clusters.css'
 
 import "leaflet-contextmenu/dist/leaflet.contextmenu.js"
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 
-import 'leaflet-dialog/Leaflet.Dialog.js'
-import 'leaflet-dialog/Leaflet.Dialog.css'
-
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
 
-var markers = L.markerClusterGroup({
+var markerConecel = L.markerClusterGroup({
   spiderfyOnMaxZoom: true,
   showCoverageOnHover: true,
   zoomToBoundsOnClick: true,
-  removeOutsideVisibleBounds:true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterConecel',
+      iconSize: L.point(40, 40)
+    });
+  }
+});
+var markerOtecel = L.markerClusterGroup({
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: true,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterOtecel',
+      iconSize: L.point(40, 40)
+    });
+  }
+});
+var markerCNT = L.markerClusterGroup({
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: true,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  iconCreateFunction: function(cluster) {
+    return new L.DivIcon({
+      html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+      className: 'clusterCNT',
+      iconSize: L.point(40, 40)
+    });
+  }
 });
 
+var sidebar=null;
 class Map extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       value: '',
-      dataToSearch:[],
-      data:{},
-      dataSelect:{},
+      dataToSearch: [],
+      data: {},
+      dataSelect: {}
     };
   }
 
-  generate_sidebar=(tagName, position, menuDiv,componente)=>{
+  generate_sidebar = (tagName, position, menuDiv, componente) => {
     var sidebar = L.control.sidebar(tagName, {
       closeButton: true,
       menuDiv,
@@ -55,429 +87,302 @@ class Map extends React.Component {
     return sidebar;
   }
 
-  generate_button=(position)=>{
-    var menu_button = L.menu_button({
-      position
-    });
+  generate_button = (position) => {
+    var menu_button = L.menu_button({position});
     return menu_button;
   }
-  
-  componentDidMount() {
-  this.map = L.map("map", {
-    layers: [
-      L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-        attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      })
-    ],
-    fullscreenControl: true,
-    fullscreenControlOptions: {
-      title:"Show me the fullscreen !",
-      titleCancel:"Exit fullscreen mode"
-    },
-    attributionControl: false,
-    zoomControl: true,
-    
-    
-    contextmenu: true,
-    contextmenuWidth: 140,
-    separator:true,
-    contextmenuItems: [{
-        text: 'Search Me',
-        icon:'https://cdn1.iconfinder.com/data/icons/maps-locations-6/24/map_location_pin_geolocation_position_3-512.png',
-        index:0,
-        callback: this.showCoordinates
-    }, {
-        text: 'Center map here',
-        icon:'https://cdn2.iconfinder.com/data/icons/map-location-set/512/632504-compass-512.png',
-        callback: this.centerMap
-    }, '-', {
-        text: 'Zoom in',
-        index:1,
-        icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_in-512.png',
-        callback: this.zoomIn
-    }, {
-        text: 'Zoom out',
-        icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_out-512.png',
-        index:2,
-        callback: this.zoomOut
-    },{
-      text: 'Menu',
-      index:3,
-      icon: 'https://cdn2.iconfinder.com/data/icons/ios-tab-bar/25/Hamburger_Round-512.png',
-      callback: this.clickMenuRight
-  }]
 
-  }).setView([-1.574255, -78.441264], 6);
-
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    detectRetina: true,
-    maxNativeZoom: 17
-  }).addTo(this.map);
-
-  var lc = L.control.locate({
-    position: 'topleft',
-    strings: {
-      title: "Estoy Aqui!"
-    }
-  }).addTo(this.map);
-
-
-  function getData(data) {
-    let dataObject=[];
-    return new Promise(resolve => {
-      var _data=data.features.map(object=>{
-        dataObject=Object.assign(object.properties,object.geometry)
-        return dataObject
-      })
-      resolve(_data);
-    })
-  }
-
-  // fetch('http://localhost:3000/data',{
-  fetch('http://192.168.1.102:3000/data_radiobase',{
-    method: 'GET',
-    headers: {'Content-Type': 'application/json'},
-    // body: JSON.stringify({
-    //     // id: this.state.user.id,
-    // })
-  }).then(response=>{
-    return  response.json()
-  }).then(jsonData=>{
-    return jsonData.jsonData;
-  }).then(myData=>{
-
-    async function _getData(Data) {
-      var _data= await getData(Data);
-      return _data
-      };
-
-    _getData(myData).then(datos=>{
-      this.setState({dataToSearch:datos})
-      handleData(datos)
-      return datos
-    });
-  let barLayer=L.geoJson(myData,{
-      // onEachFeature: async function (feature, layer) {
-      //   console.log(layer)
-      //   async function _addMarker(layer) {
-      //     await addMarker(layer);
-          
-      //     await layer.on('mouseover',()=>{
-      //       layer.bindPopup(feature.properties.f2)
-      //       .openPopup();
-      //     })
-      //     await layer.on('mouseout',()=>{
-      //       layer.closePopup();
-      //     })
-      //     await layer.on('click', ()=> {
-      //       // sidebar.toggle();
-      //       var audio = new Audio('../../audio/select.mp3');
-      //       audio.play();
-      //       handleClick(feature)
-      //     })
-      //     return layer
-      //   };
-      //   _addMarker(layer)
-      // }
-
-    //   pointToLayer: function(feature, latlng) {
-    //     var icon = L.icon({
-    //                     iconSize: [27, 27],
-    //                     iconAnchor: [13, 27],
-    //                     popupAnchor:  [1, -24],
-    //                     // iconUrl: 'icon/' + feature.properties.amenity + '.png'
-    //                     });
-    //     return L.marker(latlng, {icon: icon})
-    // },
-    onEachFeature: async function(feature, layer) {
-
-        await layer.on('mouseover',()=>{
-          layer.bindPopup(feature.properties.f15)
-          .openPopup();
+  getData= async(data)=> {
+    let dataObject = [];
+    return new Promise((resolve, reject) => {
+      try {
+        var _data = data.features.map(object => {
+          dataObject = Object.assign(object.properties, object.geometry)
+          return dataObject
         })
-        await layer.on('mouseout',()=>{
-          layer.closePopup();
-        })
-        await layer.on('click', ()=> {
-          sidebar.toggle();
-          var audio = new Audio('../../audio/select.mp3');
-          audio.play();
-          handleClick(feature)
-        })
-    }
-    
-    })
-
-    return barLayer 
-
-  }).then((barLayer)=>{
-    markers.addLayer(barLayer);
-      this.map.addLayer(markers);
-      document.getElementById("spinner").style.visibility="hidden";
-  }
-  ).catch(err=>console.log(err))
-
-
-  const handleClick=(data)=>{
-    this.setState({dataSelect: data});
-    // sidebar.toggle();
-  }
-  const handleData=(datos)=>{
-    this.props.obtainList(datos)
-  }
-  
-  const sidebar=this.generate_sidebar('sidebar','right',false);
-  // const menu_button=this.generate_button('topleft');
-
-  L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map){
-    // var antarctica = [-77,70];
-    // map.setView(antarctica);
-    clickMenu()
-
-}).addTo( this.map );  
-
-const clickMenu=()=>{
-  this.props.search('click')
-}
-
-  // this.map.addControl(menu_button)
-
- 
-
-  // console.log('buttni',menu_button)
-  
-  // // .on('click', function () {
-  // //   // sidebar_menu.toggle();
-  // //   alert('Boton Click')
-  // // });;
-
-
-  // L.DomEvent.on('button_search_style','click', function () {
-  //   // sidebar_menu.toggle();
-  //   'clock'
-  // }); 
-
-  setTimeout(function () {
-    sidebar.show();
-  }, 500);
-  setTimeout(function () {
-    sidebar.hide();
-  }, 1500);
-
-}
-
-
-
-enter=(value)=>{
-  this.setState({value})
-}
-locate=(data)=>{
-  console.log('La data retornada',data.coordinates)
-  this.setState({data:data})
-  try{
-  this.map.flyTo(L.latLng(data.coordinates[1],data.coordinates[0]),18);
-
-  // var popupt = L.popup().setLatLng([data.coordinates[1],data.coordinates[0]])
-  // .setContent("Click In me").openPopup().closePopup().openOn(this.map);
-  }
-  catch(err){
-    // console.log(err)
-  }
-}
-
-showCoordinates= (e)=> {
-  alert(e.latlng);
-}
-
-centerMap= (e)=> {
-  this.map.panTo(e.latlng);
-}
-
-zoomIn= (e)=> {
-  this.map.zoomIn();
-}
-
-zoomOut= (e)=> {
-  this.map.zoomOut();
-}
-clickMenuRight=()=>{
-  this.props.search('click')
-}
-// showMenu= (e)=> {
-//   let vari=L.DomUtil.create('div','menu')
-//   vari.innerHTML=<h1>heello</h1>
-//   console.log(vari)
-//   // alert('si se utilizo')
-// }
-
-componentWillReceiveProps(nextProps){
-  const {locate,optionsButtons}=this.props;
-  // console.log('next',nextProps.locate,'this', locate)
-  if (nextProps.loacte !== locate || locate || nextProps.locate){
-
-    console.log('respondio')
-    console.log('La data retornada',locate.coordinates)
-  this.setState({data:locate})
-  try{
-  this.map.flyTo(L.latLng(locate.coordinates[1],locate.coordinates[0]),18);
-
-  // var popupt = L.popup().setLatLng([data.coordinates[1],data.coordinates[0]])
-  // .setContent("Click In me").openPopup().closePopup().openOn(this.map);
-  }
-  catch(err){
-    // console.log(err)
-  }
-
-  }
-  console.log('adsdffgghjh',optionsButtons,'scnod',nextProps.optionsButtons)
-  if (nextProps.optionsButtons !== optionsButtons){
-
-  this.setState({data:locate})
-  document.getElementById("spinner").style.visibility="visible";
-  try{
-    markers.clearLayers();
-
-    function getData(data) {
-      let dataObject=[];
-      return new Promise((resolve,reject) => {
-        try{
-          var _data=data.features.map(object=>{
-            dataObject=Object.assign(object.properties,object.geometry)
-            return dataObject
-          })
-          return resolve(_data);
-        }
-      catch(e){
-        alert('No se encontro Resultados')
+        return resolve(_data);
+      } catch (e) {
+        //alert('No se encontro Resultados')
         return reject({})
       }
-        
-      })
-    }
 
-    fetch('http://192.168.1.102:3000/filter_radiobase',{
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-        provincia: nextProps.optionsButtons,
     })
-    }).then(response=>{
-      return  response.json()
-    }).then(jsonData=>{
-      return jsonData.jsonData;
-    }).then(myData=>{
+  }
 
-      async function _getData(Data) {
-        var _data= await getData(Data);
-        return _data
-        };
-
-      _getData(myData).then(datos=>{
-        this.setState({dataToSearch:datos})
-        handleData(datos)
-        return datos
-      });
-    let barLayer=L.geoJson(myData,{
-        // onEachFeature: async function (feature, layer) {
-        //   console.log(layer)
-        //   async function _addMarker(layer) {
-        //     await addMarker(layer);
-            
-        //     await layer.on('mouseover',()=>{
-        //       layer.bindPopup(feature.properties.f2)
-        //       .openPopup();
-        //     })
-        //     await layer.on('mouseout',()=>{
-        //       layer.closePopup();
-        //     })
-        //     await layer.on('click', ()=> {
-        //       // sidebar.toggle();
-        //       var audio = new Audio('../../audio/select.mp3');
-        //       audio.play();
-        //       handleClick(feature)
-        //     })
-        //     return layer
-        //   };
-        //   _addMarker(layer)
-        // }
-
-      //   pointToLayer: function(feature, latlng) {
-      //     var icon = L.icon({
-      //                     iconSize: [27, 27],
-      //                     iconAnchor: [13, 27],
-      //                     popupAnchor:  [1, -24],
-      //                     // iconUrl: 'icon/' + feature.properties.amenity + '.png'
-      //                     });
-      //     return L.marker(latlng, {icon: icon})
-      // },
-      onEachFeature: async function(feature, layer) {
-
-          await layer.on('mouseover',()=>{
-            layer.bindPopup(feature.properties.f15)
-            .openPopup();
-          })
-          await layer.on('mouseout',()=>{
-            layer.closePopup();
-          })
-          await layer.on('click', ()=> {
-            sidebar.toggle();
-            var audio = new Audio('../../audio/select.mp3');
-            audio.play();
-            handleClick(feature)
-          })
-      }
-      
-      })
-
-      return barLayer 
-
-    }).then((barLayer)=>{
-      markers.addLayer(barLayer);
-        this.map.addLayer(markers)
-        document.getElementById("spinner").style.visibility="hidden";
-    }
-    ).catch(err=>console.log(err))
-
-    const handleClick=(data)=>{
+  clusterFunction= (data)=>{
+    const handleClick = (data) => {
       this.setState({dataSelect: data});
       // sidebar.toggle();
     }
-    const handleData=(datos)=>{
+    return (L.geoJson(data, {
+      onEachFeature: async function(feature, layer) {
+        await layer.on('mouseover', () => {
+          layer.bindPopup('Cell ID: ' + feature.properties.cell_id).openPopup();
+        })
+        await layer.on('mouseout', () => {
+          layer.closePopup();
+        })
+        await layer.on('click', () => {
+          if (sidebar.isVisible() === false) {
+            sidebar.toggle();
+          }
+          handleClick(feature)
+        })
+      }
+    }))
+  }
+
+  componentDidMount() {
+    this.map = L.map("map", {
+      // layers: [L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
+      // layers: [L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
+      layer:[L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      })],
+      fullscreenControl: true,
+      fullscreenControlOptions: {
+        title: "Show me the fullscreen !",
+        titleCancel: "Exit fullscreen mode"
+      },
+      attributionControl: false,
+      zoomControl: true,
+
+      contextmenu: true,
+      contextmenuWidth: 140,
+      separator: true,
+      contextmenuItems: [{
+        text: 'Mi ubicacion',
+        icon: 'https://cdn1.iconfinder.com/data/icons/maps-locations-6/24/map_location_pin_geolocation_position_3-512.png',
+        index: 0,
+        callback: this.showCoordinates
+      }, {
+        text: 'Centrar mapa aqui',
+        icon: 'https://cdn2.iconfinder.com/data/icons/map-location-set/512/632504-compass-512.png',
+        callback: this.centerMap
+      },
+      '-', {
+        text: 'Acercar',
+        index: 1,
+        icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_in-512.png',
+        callback: this.zoomIn
+      }, {
+        text: 'Alejar',
+        icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_out-512.png',
+        index: 2,
+        callback: this.zoomOut
+      }, this.props.isDashboardComponent!==true?{
+        text: 'Menu',
+        index: 3,
+        icon: 'https://cdn2.iconfinder.com/data/icons/ios-tab-bar/25/Hamburger_Round-512.png',
+        callback: this.clickMenuRight
+      }:{text: 'BSs',
+          index: 3,
+          icon: 'https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_19-512.png',
+          callback: this.clickGoTo}]
+
+    }).setView([
+      -1.574255, -81
+    ], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      detectRetina: true,
+      maxNativeZoom: 17,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(this.map);
+
+    sidebar = this.generate_sidebar('sidebar', 'right', false);
+
+    this.props.isDashboardComponent!==true?(()=>{
+      fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
+      var rbTodo = {
+        features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
+        type: "FeatureCollection"
+      }
+      this.getData(rbTodo).then(datos => {
+        this.setState({dataToSearch: datos})
+        handleData(datos)
+        return datos
+      });
+
+      return [this.clusterFunction(myData.conecel),this.clusterFunction(myData.otecel), this.clusterFunction(myData.cnt)]
+
+    }).then((barLayer) => {
+      markerConecel.addLayer(barLayer[0]);
+      this.map.addLayer(markerConecel);
+
+      markerOtecel.addLayer(barLayer[1]);
+      this.map.addLayer(markerOtecel);
+
+      markerCNT.addLayer(barLayer[2]);
+      this.map.addLayer(markerCNT);
+
+      document.getElementById("spinner").style.visibility = "hidden";
+    }).catch(err => console.log(err))
+    //Fin de funcion de pedido de datos
+
+    const handleData = (datos) => {
       this.props.obtainList(datos)
     }
     
-    const sidebar=this.generate_sidebar('sidebar','right',false);
-    console.log('helloMUHNO',nextProps.optionsButtons)
-  }
-  catch(err){
-    // console.log(err)
-  }
+    this.props.isDashboardComponent!==true &&
+    L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
+      clickMenu()
+
+    }).addTo(this.map);
+
+    const clickMenu = () => {
+      this.props.search('click')
+    }
+    })()
+    :alert('sorry')
+    // setTimeout(function() {
+    //   sidebar.show();
+    // }, 500);
+    // setTimeout(function() {
+    //   sidebar.hide();
+    // }, 1500);
 
   }
-  // let electionArray=[];
-  // for (var i in optionsButtons) {
-  //   if (optionsButtons.hasOwnProperty(i)) {
-  //       if(optionsButtons[i]){
-  //         electionArray.push(i)
-  //       }
-  //   }
-  // }
-  // console.log('clickeados',electionArray)
-}
+  //didmount end
 
+  enter = (value) => {
+    this.setState({value})
+  }
+  locate = (data) => {
+    //console.log('La data retornada', data.coordinates)
+    this.setState({data: data})
+    try {
+      this.map.flyTo(L.latLng(data.coordinates[1], data.coordinates[0]), 18);
+
+      // var popupt = L.popup().setLatLng([data.coordinates[1],data.coordinates[0]])
+      // .setContent("Click In me").openPopup().closePopup().openOn(this.map);
+    } catch (err) {
+      // console.log(err)
+    }
+  }
+
+  showCoordinates = (e) => {
+    alert(e.latlng);
+  }
+
+  centerMap = (e) => {
+    this.map.panTo(e.latlng);
+  }
+
+  zoomIn = (e) => {
+    this.map.zoomIn();
+  }
+
+  zoomOut = (e) => {
+    this.map.zoomOut();
+  }
+  clickMenuRight = () => {
+    this.props.search('click')
+  }
+
+  clickGoTo = () => {
+    var win = window.open('https://github.com/ChristianMarca', '_blank');
+    win.focus();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {locate, optionsButtons} = this.props;
+    if (nextProps.locate !== locate || locate || nextProps.locate) {
+
+      this.setState({data: locate})
+      try {
+        this.map.flyTo(L.latLng(locate.coordinates[1], locate.coordinates[0]), 18);
+      } catch (err) {
+        // console.log(err)
+      }
+
+    }
+    if (nextProps.optionsButtons !== optionsButtons && this.props.isDashboardComponent!==true) {
+
+      this.setState({data: locate})
+      document.getElementById("spinner").style.visibility = "visible";
+      try {
+        //markers.clearLayers();
+        markerConecel.clearLayers();
+        markerOtecel.clearLayers();
+        markerCNT.clearLayers();
+
+        fetch('http://192.168.1.102:3000/mapa/filter_radiobase', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({campos: nextProps.optionsButtons})
+        }).then(response => {
+          return response.json()
+        }).then(jsonData => {
+          return jsonData.jsonData;
+        }).then(myData => {
+          //keys = [];
+          var keys = Object.keys(myData);
+          var acumm = [];
+
+          var layersComplete = keys.map((actual, indice)=> {
+
+            if (myData[keys[indice]]['features']!==null){
+              acumm = acumm.concat(myData[keys[indice]]['features'])
+            }
+
+            return this.clusterFunction(myData[keys[indice]]['features'])
+          })
+          var rbTodo = {
+            features: acumm,
+            type: "FeatureCollection"
+          }
+          this.getData(rbTodo).then(datos => {
+            this.setState({dataToSearch: datos})
+            handleData(datos)
+            return datos
+          });
+          var completo = {layers:layersComplete, llaves:keys}
+          return completo
+        }).then(completo => {
+          completo.llaves.map((actual,indice)=>{
+            if(actual==="CONECEL"){
+              markerConecel.addLayer(completo.layers[indice]);
+              return this.map.addLayer(markerConecel);
+            }
+            if(actual==="OTECEL"){
+              markerOtecel.addLayer(completo.layers[indice]);
+              return this.map.addLayer(markerOtecel);
+            }
+            if(actual==="CNT"){
+              markerCNT.addLayer(completo.layers[indice]);
+              return this.map.addLayer(markerCNT);
+            }
+            return "No Found"
+          })
+          document.getElementById("spinner").style.visibility = "hidden";
+        }).catch(err => console.log(err))
+
+        const handleData = (datos) => {
+          this.props.obtainList(datos)
+        }
+
+      } catch (err) {
+        // console.log(err)
+      }
+
+    }
+  }
 
   render() {
-
-    let menu_bar=<SideMenu value_return={this.enter} menuList={this.state.dataToSearch} locate={this.props.locate}/>;
-
-    return (
-      
-        <div id="map">
-        <div class="loader" id='spinner'></div>
-        <Side value={this.state.value} dataSearch={this.state.dataSelect}/>
-        </div>
-  )
+    return (<div id="map">
+      <div className="loader" id='spinner'></div>
+      <Side value={this.state.value} dataSearch={this.state.dataSelect}/>
+    </div>)
   }
 
 }
