@@ -1,20 +1,13 @@
 import React, {Component} from 'react'
 import Map from './mapa';
-import './map.css'
 import 'tachyons'
 import {CajaTxt} from '../search/loc';
 import styled from "styled-components"
 import {slide as Menu} from 'react-burger-menu';
-import {
-  Navbar,
-  NavItem,
-  MenuItem,
-  NavDropdown,
-  Nav,
-  Panel
-} from 'react-bootstrap';
+import {Navbar} from '../Navbar';
 import "leaflet-contextmenu/dist/leaflet.contextmenu.js"
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css";
+import './map.css'
 
 class Mapaj extends Component {
 
@@ -79,7 +72,7 @@ class Mapaj extends Component {
     });
   };
 
-  //##### Style with styled-comonents##############
+  //##### Style with styled-components##############
   getWidthString = (span) => {
     if (!span)
       return;
@@ -248,118 +241,40 @@ class Mapaj extends Component {
 
           render() {
             const {markerPosition} = this.state;
-
             return (<div className="container" id="outer-container page-wrap">
+                      <Navbar />
+                      <this.Row>
+                        <this.Column xs='12' sm='3' md='3' className='Columna'>
+                          <Menu isOpen={this.state.menuOpen} onStateChange={(state) => this.handleStateChange(state)} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} width={350}>
+                            <div className="panel">
+                                <h3 className="panelTitle">Search</h3>
+                                <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate}/>
+                            </div>
+                                <h3 className="panelTitle">Operadora</h3>
+                                <div className='cf dib GroupButtons'>
+                                  <button className="buttons  f4 fl link ba ph3 pv2 dib buttonLeft" id="CNT" onClick={() => this.buttonsEvents('CNT')}>CNT EP</button>
+                                  <button className="buttons f4 fl link ba ph3 pv2 dib" id="CONECEL" onClick={() => this.buttonsEvents('CONECEL')}>CONECEL</button>
+                                  <button className="buttons  f4 fl link ba ph3 pv2 dib buttonRight" id='OTECEL' onClick={() => this.buttonsEvents('OTECEL')}>OTECEL</button>
+                                </div>
+                                <h3 className="panelTitle">Tecnologia</h3>
+                                <div className='cf dib GroupButtons'>
+                                  <button className="buttons  f4 fl link ba ph3 pv2 dib buttonLeft" id='GSM' onClick={() => this.buttonsEvents('GSM')}>GSM</button>
+                                  <button className="buttons f4 fl link ba ph3 pv2 dib" id='LTE' onClick={() => this.buttonsEvents('LTE')}>LTE</button>
+                                  <button className="buttons  f4 fl link ba ph3 pv2 dib buttonRight" id='UMTS' onClick={() => this.buttonsEvents('UMTS')}>UMTS</button>
+                                </div>
+                            <div className="buttonPanel">
+                              <button className="f4 fl link ba ph3 pv2 dib buttonSubmit center" onClick={() => this.buttonSubmint()}>Aceptar</button>
+                            </div>
+                          </Menu>
+                        </this.Column>
+                        <this.Column xs='12' sm='12' md='12'>
+                          <this.MapaScroll className='mapa'>
+                            <Map isDashboardComponent={false} markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)} optionsButtons={this.state.optionAcept}/>
+                          </this.MapaScroll>
+                        </this.Column>
+                      </this.Row>
 
-              <this.Row>
-                <this.Header className="navContainer">
-
-                  <Navbar inverse={true} collapseOnSelect={true}>
-                    <Navbar.Header>
-                      <Navbar.Brand>
-                        <a href="https://github.com/ChristianMarca">
-                          <span>BSs</span>
-                        </a>
-                      </Navbar.Brand>
-                      <Navbar.Toggle/>
-                    </Navbar.Header>
-                    <Navbar.Collapse className='collapseMenu1'>
-                      <Nav>
-                        <NavItem eventKey={2} href="https://www.arcotel.gob.ec">
-                          ARCOTEL
-                        </NavItem>
-                        <NavDropdown eventKey={3} title="Información" id="basic-nav-dropdown">
-                          <MenuItem eventKey={3.1}>About</MenuItem>
-                          <MenuItem eventKey={3.2}>Instructivo</MenuItem>
-                          <MenuItem eventKey={3.3}>Documentación</MenuItem>
-                          <MenuItem divider={true}/>
-                          <MenuItem eventKey={3.3}>Desarrollador</MenuItem>
-                        </NavDropdown>
-                      </Nav>
-                      <Nav pullRight={true}>
-                        <NavItem eventKey={2} href="https://christianmarca.github.io/practice_page.github.io/">
-                          DEV
-                        </NavItem>
-                      </Nav>
-                    </Navbar.Collapse>
-                  </Navbar>
-
-                </this.Header>
-
-              </this.Row>
-
-              <this.Row>
-                <this.Column xs='12' sm='3' md='3' className='Columna'>
-                  <Menu isOpen={this.state.menuOpen} onStateChange={(state) => this.handleStateChange(state)} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} width={350}>
-
-                    <Panel className="panel">
-                      <Panel.Heading style={{
-                          backgroundColor: "rgba(55, 58, 71, 0.96)"
-                        }}>
-                        <h1 className="panelTitle">Search</h1>
-                      </Panel.Heading>
-                      <Panel.Body>
-
-                        <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate}/>
-
-                      </Panel.Body>
-                    </Panel>
-
-                    <Panel className="panel">
-                      <Panel.Heading style={{
-                          backgroundColor: "rgba(55, 58, 71, 0.96)"
-                        }}>
-                        <h1 className="panelTitle">Operadora</h1>
-                      </Panel.Heading>
-                      <Panel.Body>
-
-                        {/* <div className="flex items-center justify-center flex-column vh-100"> */}
-                        <div className='cf dib GrupButtons'>
-                          {/* <p className="m0 f6 silver tc">Download</p> */}
-                          <button className="buttons  f4 fl link ba ph3 pv2 dib buttonLeft" id="CNT" onClick={() => this.buttonsEvents('CNT')}>CNT EP</button>
-                          <button className="buttons f4 fl link ba ph3 pv2 dib" id="CONECEL" onClick={() => this.buttonsEvents('CONECEL')}>CONECEL</button>
-                          <button className="buttons  f4 fl link ba ph3 pv2 dib buttonRight" id='OTECEL' onClick={() => this.buttonsEvents('OTECEL')}>OTECEL</button>
-                        </div>
-                        {/* </div> */}
-
-                      </Panel.Body>
-                    </Panel>
-
-                    <Panel className="panel">
-                      <Panel.Heading style={{
-                          backgroundColor: "rgba(55, 58, 71, 0.96)"
-                        }}>
-                        <h1 className="panelTitle">Tecnologia</h1>
-                      </Panel.Heading>
-                      <Panel.Body >
-
-                        {/* <div className="flex items-center justify-center flex-column vh-100"> */}
-                        <div className='cf dib GrupButtons'>
-                          {/* <p className="m0 f6 silver tc">Download</p> */}
-                          <button className="buttons  f4 fl link ba ph3 pv2 dib buttonLeft" id='GSM' onClick={() => this.buttonsEvents('GSM')}>GSM</button>
-                          <button className="buttons f4 fl link ba ph3 pv2 dib" id='LTE' onClick={() => this.buttonsEvents('LTE')}>LTE</button>
-                          <button className="buttons  f4 fl link ba ph3 pv2 dib buttonRight" id='UMTS' onClick={() => this.buttonsEvents('UMTS')}>UMTS</button>
-                        </div>
-                        {/* </div> */}
-
-                      </Panel.Body>
-                    </Panel>
-                    <div className="buttonPanel">
-                      <button className="f4 fl link ba ph3 pv2 dib buttonSubmit center" onClick={() => this.buttonSubmint()}>Aceptar</button>
-                    </div>
-
-                  </Menu>
-                </this.Column>
-                <this.Column xs='12' sm='12' md='12'>
-                  <this.MapaScroll className='mapa'>
-
-                    <Map markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)} optionsButtons={this.state.optionAcept}/>
-
-                  </this.MapaScroll>
-                </this.Column>
-              </this.Row>
-
-            </div>);
+                    </div>);
           }
         }
 

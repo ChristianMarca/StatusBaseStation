@@ -10,14 +10,14 @@ class CajaTxt extends React.Component {
       value: '',
       suggestions: [],
 
-      f4Value: '',
-      f4Suggestions: [],
-      f11Value: '',
-      f11Suggestions: [],
-      f8Value: '',
-      f8Suggestions: [],
-      f7Value: '',
-      f7Suggestions: [],
+      estValue: '',
+      estSuggestions: [],
+      cell_idValue: '',
+      cell_idSuggestions: [],
+      direccionValue: '',
+      direccionSuggestions: [],
+      parroquiaValue: '',
+      parroquiaSuggestions: [],
 
       informationValue:{},
 
@@ -50,80 +50,80 @@ class CajaTxt extends React.Component {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
 
-    return this.state.RadioBases.filter(user => regex.test(user.f4) || regex.test(user.f11) || regex.test(user.f8) || regex.test(user.f7));
+    return this.state.RadioBases.filter(user => regex.test(user.nom_sit) || regex.test(user.cell_id) || regex.test(user.dir) || regex.test(user.parroquia));
   }
 
-  getSuggestionf4(suggestion) {
-    return String(suggestion.f4);
+  getSuggestionest(suggestion) {
+    return String(suggestion.nom_sit);
   }
 
-  getSuggestionf11(suggestion) {
-    return String(suggestion.f11);
+  getSuggestioncell_id(suggestion) {
+    return String(suggestion.cell_id);
   }
 
-  getSuggestionf8(suggestion) {
-    return String(suggestion.f8);
+  getSuggestiondireccion(suggestion) {
+    return String(suggestion.dir);
   }
 
-  getSuggestionf7(suggestion) {
-    return String(suggestion.f7);
+  getSuggestionparroquia(suggestion) {
+    return String(suggestion.parroquia);
   }
 
   renderSuggestion(suggestion) {
     return (
-      <span>{suggestion.f4}/{suggestion.f11}/{suggestion.f8}/{suggestion.f7}</span>
+      <span>{suggestion.nom_sit}/{suggestion.cell_id}/{suggestion.dir}/{suggestion.parroquia}</span>
     );
   }
 
-  onf4Change = (event, { newValue }) => {
+  onestChange = (event, { newValue }) => {
     this.setState({
-      f4Value: newValue
+      estValue: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
 
-  onf11Change = (event, { newValue }) => {
+  oncell_idChange = (event, { newValue }) => {
     this.setState({
-      f11Value: newValue
+      cell_idValue: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
 
-  onf8Change = (event, { newValue }) => {
+  ondireccionChange = (event, { newValue }) => {
     this.setState({
-      f8Value: newValue
+      direccionValue: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
 
-  onf7Change = (event, { newValue }) => {
+  onparroquiaChange = (event, { newValue }) => {
     this.setState({
-      f7Value: newValue
+      parroquiaValue: newValue
     });
     event.preventDefault();
     event.stopPropagation();
   };
 
-  onf4SuggestionsFetchRequested = ({ value }) => {
+  onestSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f4Suggestions: this.getSuggestions(value)
+      estSuggestions: this.getSuggestions(value)
     });
   };
 
-  onf4SuggestionsClearRequested = () => {
+  onestSuggestionsClearRequested = () => {
     this.setState({
-      f4Suggestions: []
+      estSuggestions: []
     });
   };
 
-  onf4SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  onestSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     this.setState({
-      f11Value: String(suggestion.f11),
-      f8Value: String(suggestion.f8),
-      f7Value: String(suggestion.f7),
+      cell_idValue: String(suggestion.cell_id),
+      direccionValue: String(suggestion.dir),
+      parroquiaValue: String(suggestion.parroquia),
       informationValue: suggestion,
 
     });
@@ -132,24 +132,24 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
-  onf11SuggestionsFetchRequested = ({ value }) => {
+  oncell_idSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f11Suggestions: this.getSuggestions(value)
+      cell_idSuggestions: this.getSuggestions(value)
     });
   };
 
-  onf11SuggestionsClearRequested = (event) => {
+  oncell_idSuggestionsClearRequested = (event) => {
     this.setState({
-      f11Suggestions: []
+      cell_idSuggestions: []
     });
   };
 
-  onf11SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  oncell_idSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     //console.log(method)
     this.setState({
-      f4Value: String(suggestion.f4),
-      f8Value: String(suggestion.f8),
-      f7Value: String(suggestion.f7),
+      estValue: String(suggestion.nom_sit),
+      direccionValue: String(suggestion.dir),
+      parroquiaValue: String(suggestion.parroquia),
       informationValue: suggestion,
     });
     this.props.locate(suggestion)
@@ -157,24 +157,24 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
-  onf7SuggestionsFetchRequested = ({ value }) => {
+  onparroquiaSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f7Suggestions: this.getSuggestions(String(value))
+      parroquiaSuggestions: this.getSuggestions(String(value))
     });
   };
 
-  onf7SuggestionsClearRequested = (event) => {
+  onparroquiaSuggestionsClearRequested = (event) => {
     this.setState({
-      f7Suggestions: []
+      parroquiaSuggestions: []
     });
   };
 
-  onf7SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  onparroquiaSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     //console.log(method)
     this.setState({
-      f4Value: String(suggestion.f4),
-      f8Value: String(suggestion.f8),
-      f11Value: String(suggestion.f11),
+      estValue: String(suggestion.nom_sit),
+      direccionValue: String(suggestion.dir),
+      cell_idValue: String(suggestion.cell_id),
       informationValue: suggestion,
     });
     this.props.locate(this.state.informationValue)
@@ -182,23 +182,23 @@ class CajaTxt extends React.Component {
     event.stopPropagation();
   };
 
-  onf8SuggestionsFetchRequested = ({ value }) => {
+  ondireccionSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      f8Suggestions: this.getSuggestions(value)
+      direccionSuggestions: this.getSuggestions(value)
     });
   };
 
-  onf8SuggestionsClearRequested = () => {
+  ondireccionSuggestionsClearRequested = () => {
     this.setState({
-      f8Suggestions: []
+      direccionSuggestions: []
     });
   };
 
-  onf8SuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+  ondireccionSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
     this.setState({
-      f4Value: String(suggestion.f4),
-      f11Value: String(suggestion.f11),
-      f7Value: String(suggestion.f7),
+      estValue: String(suggestion.nom_sit),
+      cell_idValue: String(suggestion.cell_id),
+      parroquiaValue: String(suggestion.parroquia),
       informationValue: suggestion,
 
     });
@@ -224,86 +224,86 @@ class CajaTxt extends React.Component {
   render() {
 
     const {
-      f4Value,
-      f4Suggestions,
-      f11Value,
-      f11Suggestions,
-      f8Value,
-      f8Suggestions ,
-      f7Suggestions,
-      f7Value
+      estValue,
+      estSuggestions,
+      cell_idValue,
+      cell_idSuggestions,
+      direccionValue,
+      direccionSuggestions ,
+      parroquiaSuggestions,
+      parroquiaValue
     } = this.state;
-    const f4InputProps = {
+    const estInputProps = {
       placeholder: "Cuenca",
-      value: f4Value,
-      onChange: this.onf4Change,
+      value: estValue,
+      onChange: this.onestChange,
       onKeyDown: this.onKeyDown,
     };
-    const f11InputProps = {
+    const cell_idInputProps = {
       placeholder: "12345",
-      value: f11Value,
-      onChange: this.onf11Change,
+      value: cell_idValue,
+      onChange: this.oncell_idChange,
       onKeyDown: this.onKeyDown,
     };
-    const f8InputProps = {
+    const direccionInputProps = {
       placeholder: "Cuenca Centro",
-      value: f8Value,
-      onChange: this.onf8Change,
+      value: direccionValue,
+      onChange: this.ondireccionChange,
       onKeyDown: this.onKeyDown,
     };
-    const f7InputProps = {
+    const parroquiaInputProps = {
       placeholder: "El Rosario",
-      value: f7Value,
-      onChange: this.onf7Change,
+      value: parroquiaValue,
+      onChange: this.onparroquiaChange,
       onKeyDown: this.onKeyDown,
     };
 
     return(
 
       <div className="locationContainer">
-        <h3>Estructura</h3>
+        <h4 className="titleFieldSearch">Estructura</h4>
         <Autosuggest
-          id="f4"
-          suggestions={f4Suggestions}
-          onSuggestionsFetchRequested={this.onf4SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf4SuggestionsClearRequested}
-          onSuggestionSelected={this.onf4SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf4}
+          id="nom_sit"
+          suggestions={estSuggestions}
+          onSuggestionsFetchRequested={this.onestSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onestSuggestionsClearRequested}
+          onSuggestionSelected={this.onestSuggestionSelected}
+          getSuggestionValue={this.getSuggestionest}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f4InputProps}
+          inputProps={estInputProps}
         />
-        <h3>Cell ID</h3>
+        <h4 className="titleFieldSearch">Cell ID</h4>
         <Autosuggest
-          id="f11"
-          suggestions={f11Suggestions}
-          onSuggestionsFetchRequested={this.onf11SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf11SuggestionsClearRequested}
-          onSuggestionSelected={this.onf11SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf11}
+          id="cell_id"
+          suggestions={cell_idSuggestions}
+          onSuggestionsFetchRequested={this.oncell_idSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.oncell_idSuggestionsClearRequested}
+          onSuggestionSelected={this.oncell_idSuggestionSelected}
+          getSuggestionValue={this.getSuggestioncell_id}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f11InputProps}
+          inputProps={cell_idInputProps}
         />
-        <h3>Dirección</h3>
+        <h4 className="titleFieldSearch">Dirección</h4>
         <Autosuggest
-          id="f8"
-          suggestions={f8Suggestions}
-          onSuggestionsFetchRequested={this.onf8SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf8SuggestionsClearRequested}
-          onSuggestionSelected={this.onf8SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf8}
+          id="dir"
+          suggestions={direccionSuggestions}
+          onSuggestionsFetchRequested={this.ondireccionSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.ondireccionSuggestionsClearRequested}
+          onSuggestionSelected={this.ondireccionSuggestionSelected}
+          getSuggestionValue={this.getSuggestiondireccion}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f8InputProps}
+          inputProps={direccionInputProps}
         />
-        <h3>Parroquia</h3>
+        <h4 className='titleFieldSearch'>Parroquia</h4>
         <Autosuggest
-          id="f7"
-          suggestions={f7Suggestions}
-          onSuggestionsFetchRequested={this.onf7SuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onf7SuggestionsClearRequested}
-          onSuggestionSelected={this.onf7SuggestionSelected}
-          getSuggestionValue={this.getSuggestionf7}
+          id="parroquia"
+          suggestions={parroquiaSuggestions}
+          onSuggestionsFetchRequested={this.onparroquiaSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onparroquiaSuggestionsClearRequested}
+          onSuggestionSelected={this.onparroquiaSuggestionSelected}
+          getSuggestionValue={this.getSuggestionparroquia}
           renderSuggestion={this.renderSuggestion}
-          inputProps={f7InputProps}
+          inputProps={parroquiaInputProps}
         />
 
       </div>
