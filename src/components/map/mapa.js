@@ -4,7 +4,7 @@ import 'leaflet.locatecontrol';
 import 'tachyons'
 import '../../plugins/leaflet-sidebar';
 import '../../plugins/leaflet-sidebar/src/L.Control.Sidebar.css';
-import {Side, SideMenu} from './side';
+import {Side} from './side';
 
 import '../../plugins/menu';
 import '../../plugins/menu/style.css'
@@ -62,6 +62,7 @@ var markerCNT = L.markerClusterGroup({
   }
 });
 
+var sidebar=null;
 class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -91,9 +92,54 @@ class Map extends React.Component {
     return menu_button;
   }
 
+  getData= async(data)=> {
+    let dataObject = [];
+    return new Promise((resolve, reject) => {
+      try {
+        var _data = data.features.map(object => {
+          dataObject = Object.assign(object.properties, object.geometry)
+          return dataObject
+        })
+        return resolve(_data);
+      } catch (e) {
+        //alert('No se encontro Resultados')
+        return reject({})
+      }
+
+    })
+  }
+
+  clusterFunction= (data)=>{
+    const handleClick = (data) => {
+      this.setState({dataSelect: data});
+      // sidebar.toggle();
+    }
+    return (L.geoJson(data, {
+      onEachFeature: async function(feature, layer) {
+        await layer.on('mouseover', () => {
+          layer.bindPopup('Cell ID: ' + feature.properties.cell_id).openPopup();
+        })
+        await layer.on('mouseout', () => {
+          layer.closePopup();
+        })
+        await layer.on('click', () => {
+          if (sidebar.isVisible() === false) {
+            sidebar.toggle();
+          }
+          handleClick(feature)
+        })
+      }
+    }))
+  }
+
   componentDidMount() {
     this.map = L.map("map", {
-      layers: [L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
+      // layers: [L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
+      // layers: [L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
+      layer:[L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      })],
       fullscreenControl: true,
       fullscreenControlOptions: {
         title: "Show me the fullscreen !",
@@ -105,155 +151,67 @@ class Map extends React.Component {
       contextmenu: true,
       contextmenuWidth: 140,
       separator: true,
-      contextmenuItems: [
-        {
-          text: 'Mi ubicacion',
-          icon: 'https://cdn1.iconfinder.com/data/icons/maps-locations-6/24/map_location_pin_geolocation_position_3-512.png',
-          index: 0,
-          callback: this.showCoordinates
-        }, {
-          text: 'Centrar mapa aqui',
-          icon: 'https://cdn2.iconfinder.com/data/icons/map-location-set/512/632504-compass-512.png',
-          callback: this.centerMap
-        },
-        '-', {
-          text: 'Acercar',
-          index: 1,
-          icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_in-512.png',
-          callback: this.zoomIn
-        }, {
-          text: 'Alejar',
-          icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_out-512.png',
-          index: 2,
-          callback: this.zoomOut
-        }, {
-          text: 'Menu',
+      contextmenuItems: [{
+        text: 'Mi ubicacion',
+        icon: 'https://cdn1.iconfinder.com/data/icons/maps-locations-6/24/map_location_pin_geolocation_position_3-512.png',
+        index: 0,
+        callback: this.showCoordinates
+      }, {
+        text: 'Centrar mapa aqui',
+        icon: 'https://cdn2.iconfinder.com/data/icons/map-location-set/512/632504-compass-512.png',
+        callback: this.centerMap
+      },
+      '-', {
+        text: 'Acercar',
+        index: 1,
+        icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_in-512.png',
+        callback: this.zoomIn
+      }, {
+        text: 'Alejar',
+        icon: 'https://cdn3.iconfinder.com/data/icons/ui-9/512/zoom_out-512.png',
+        index: 2,
+        callback: this.zoomOut
+      }, this.props.isDashboardComponent!==true?{
+        text: 'Menu',
+        index: 3,
+        icon: 'https://cdn2.iconfinder.com/data/icons/ios-tab-bar/25/Hamburger_Round-512.png',
+        callback: this.clickMenuRight
+      }:{text: 'BSs',
           index: 3,
-          icon: 'https://cdn2.iconfinder.com/data/icons/ios-tab-bar/25/Hamburger_Round-512.png',
-          callback: this.clickMenuRight
-        }
-      ]
+          icon: 'https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_19-512.png',
+          callback: this.clickGoTo}]
 
     }).setView([
       -1.574255, -81
     ], 6);
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+      maxZoom: 18,
       detectRetina: true,
-      maxNativeZoom: 17
+      maxNativeZoom: 17,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.map);
 
-    /* Funcion para colocar indicador en mapa
-    var lc = L.control.locate({
-      position: 'topleft',
-      strings: {
-        title: "Estoy Aqui!"
-      }
-    }).addTo(this.map);
-    */
+    sidebar = this.generate_sidebar('sidebar', 'right', false);
 
-    function getData(data) {
-      let dataObject = [];
-      return new Promise(resolve => {
-        var _data = data.features.map(object => {
-          dataObject = Object.assign(object.properties, object.geometry)
-          //console.log('esto ques',dataObject)
-          return dataObject
-        })
-        //console.log('pruebna',_data);
-        resolve(_data);
-      })
-    }
-
-    //Funcion para pedido de datos
-    /*
-    const fetchTodoRB = async function(){
-      fetch('http://localhost:3001/data_radiobase', {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'}
-      }
-    }*/
-
-    fetch('http://localhost:3001/data_radiobase', {
+    this.props.isDashboardComponent!==true?(()=>{
+      fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
-
-      async function _getData(Data) {
-        var _data = await getData(Data);
-        return _data
-      };
       var rbTodo = {
         features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
         type: "FeatureCollection"
       }
-      //console.log('que es todo', myData.conecel.features.length,myData.otecel.features.length,myData.cnt.features.length, rbTodo.features.length)
-      _getData(rbTodo).then(datos => {
+      this.getData(rbTodo).then(datos => {
         this.setState({dataToSearch: datos})
         handleData(datos)
         return datos
       });
 
-      let barLayerCon = L.geoJson(myData.conecel, {
-        onEachFeature: async function(feature, layer) {
-
-          await layer.on('mouseover', () => {
-            layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
-          })
-          await layer.on('mouseout', () => {
-            layer.closePopup();
-          })
-          await layer.on('click', () => {
-            if (sidebar.isVisible() === false) {
-              sidebar.toggle();
-            }
-            handleClick(feature)
-          })
-        }
-
-      })
-
-      let barLayerOte = L.geoJson(myData.otecel, {
-        onEachFeature: async function(feature, layer) {
-
-          await layer.on('mouseover', () => {
-            layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
-          })
-          await layer.on('mouseout', () => {
-            layer.closePopup();
-          })
-          await layer.on('click', () => {
-            if (sidebar.isVisible() === false) {
-              sidebar.toggle();
-            }
-            handleClick(feature)
-          })
-        }
-
-      })
-
-      let barLayerCnt = L.geoJson(myData.cnt, {
-        onEachFeature: async function(feature, layer) {
-
-          await layer.on('mouseover', () => {
-            layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
-          })
-          await layer.on('mouseout', () => {
-            layer.closePopup();
-          })
-          await layer.on('click', () => {
-            if (sidebar.isVisible() === false) {
-              sidebar.toggle();
-            }
-            handleClick(feature)
-          })
-        }
-
-      })
-      //console.log('prueba',barLayer);
-      return [barLayerCon, barLayerOte, barLayerCnt]
+      return [this.clusterFunction(myData.conecel),this.clusterFunction(myData.otecel), this.clusterFunction(myData.cnt)]
 
     }).then((barLayer) => {
       markerConecel.addLayer(barLayer[0]);
@@ -269,20 +227,12 @@ class Map extends React.Component {
     }).catch(err => console.log(err))
     //Fin de funcion de pedido de datos
 
-    const handleClick = (data) => {
-      this.setState({dataSelect: data});
-      // sidebar.toggle();
-    }
     const handleData = (datos) => {
       this.props.obtainList(datos)
     }
-
-    const sidebar = this.generate_sidebar('sidebar', 'right', false);
-    // const menu_button=this.generate_button('topleft');
-
+    
+    this.props.isDashboardComponent!==true &&
     L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
-      // var antarctica = [-77,70];
-      // map.setView(antarctica);
       clickMenu()
 
     }).addTo(this.map);
@@ -290,13 +240,14 @@ class Map extends React.Component {
     const clickMenu = () => {
       this.props.search('click')
     }
-
-    setTimeout(function() {
-      sidebar.show();
-    }, 500);
-    setTimeout(function() {
-      sidebar.hide();
-    }, 1500);
+    })()
+    :alert('sorry')
+    // setTimeout(function() {
+    //   sidebar.show();
+    // }, 500);
+    // setTimeout(function() {
+    //   sidebar.hide();
+    // }, 1500);
 
   }
   //didmount end
@@ -336,25 +287,24 @@ class Map extends React.Component {
     this.props.search('click')
   }
 
+  clickGoTo = () => {
+    var win = window.open('https://github.com/ChristianMarca', '_blank');
+    win.focus();
+  }
+
   componentWillReceiveProps(nextProps) {
     const {locate, optionsButtons} = this.props;
-    // console.log('next',nextProps.locate,'this', locate)
     if (nextProps.locate !== locate || locate || nextProps.locate) {
 
-      //console.log('respondio')
-      //console.log('La data retornada', locate.coordinates)
       this.setState({data: locate})
       try {
         this.map.flyTo(L.latLng(locate.coordinates[1], locate.coordinates[0]), 18);
-
-        // var popupt = L.popup().setLatLng([data.coordinates[1],data.coordinates[0]])
-        // .setContent("Click In me").openPopup().closePopup().openOn(this.map);
       } catch (err) {
         // console.log(err)
       }
 
     }
-    if (nextProps.optionsButtons !== optionsButtons) {
+    if (nextProps.optionsButtons !== optionsButtons && this.props.isDashboardComponent!==true) {
 
       this.setState({data: locate})
       document.getElementById("spinner").style.visibility = "visible";
@@ -364,24 +314,7 @@ class Map extends React.Component {
         markerOtecel.clearLayers();
         markerCNT.clearLayers();
 
-        function getData(data) {
-          let dataObject = [];
-          return new Promise((resolve, reject) => {
-            try {
-              var _data = data.features.map(object => {
-                dataObject = Object.assign(object.properties, object.geometry)
-                return dataObject
-              })
-              return resolve(_data);
-            } catch (e) {
-              //alert('No se encontro Resultados')
-              return reject({})
-            }
-
-          })
-        }
-
-        fetch('http://localhost:3001/filter_radiobase', {
+        fetch('http://192.168.1.102:3000/mapa/filter_radiobase', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -395,54 +328,20 @@ class Map extends React.Component {
           //keys = [];
           var keys = Object.keys(myData);
           var acumm = [];
-          //console.log('llaves', keys)
-          //console.log(myData)
-
-          async function _getData(Data) {
-            try{
-            var _data = await getData(Data);
-            return _data
-          }catch (e){
-            return e
-          }
-          };
 
           var layersComplete = keys.map((actual, indice)=> {
-            //(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features))
+
             if (myData[keys[indice]]['features']!==null){
               acumm = acumm.concat(myData[keys[indice]]['features'])
             }
 
-            //console.log('Acumulador',acumm)
-            //console.log('Datos',myData[keys[indice]]['features'])
-
-            let barLayer = L.geoJson(myData[keys[indice]]['features'], {
-              onEachFeature: async function(feature, layer) {
-
-                await layer.on('mouseover', () => {
-                  layer.bindPopup('Cell ID: ' + feature.properties.f11).openPopup();
-                })
-                await layer.on('mouseout', () => {
-                  layer.closePopup();
-                })
-                await layer.on('click', () => {
-                  if (sidebar.isVisible() === false) {
-                    sidebar.toggle();
-                  }
-                  handleClick(feature)
-                })
-              }
-
-            });
-
-            return barLayer
+            return this.clusterFunction(myData[keys[indice]]['features'])
           })
           var rbTodo = {
             features: acumm,
             type: "FeatureCollection"
           }
-          console.log('hola',rbTodo)
-          _getData(rbTodo).then(datos => {
+          this.getData(rbTodo).then(datos => {
             this.setState({dataToSearch: datos})
             handleData(datos)
             return datos
@@ -450,38 +349,28 @@ class Map extends React.Component {
           var completo = {layers:layersComplete, llaves:keys}
           return completo
         }).then(completo => {
-          //console.log(layersComplete)
           completo.llaves.map((actual,indice)=>{
-            //console.log('ya quiero terminar',completo.layers)
             if(actual==="CONECEL"){
               markerConecel.addLayer(completo.layers[indice]);
-              this.map.addLayer(markerConecel);
+              return this.map.addLayer(markerConecel);
             }
             if(actual==="OTECEL"){
               markerOtecel.addLayer(completo.layers[indice]);
-              this.map.addLayer(markerOtecel);
+              return this.map.addLayer(markerOtecel);
             }
             if(actual==="CNT"){
               markerCNT.addLayer(completo.layers[indice]);
-              this.map.addLayer(markerCNT);
+              return this.map.addLayer(markerCNT);
             }
-
+            return "No Found"
           })
-
-
           document.getElementById("spinner").style.visibility = "hidden";
         }).catch(err => console.log(err))
 
-        const handleClick = (data) => {
-          this.setState({dataSelect: data});
-          // sidebar.toggle();
-        }
         const handleData = (datos) => {
           this.props.obtainList(datos)
         }
 
-        const sidebar = this.generate_sidebar('sidebar', 'right', false);
-        //console.log('Campos de filtros', nextProps.optionsButtons)
       } catch (err) {
         // console.log(err)
       }
@@ -490,9 +379,6 @@ class Map extends React.Component {
   }
 
   render() {
-
-    let menu_bar = <SideMenu value_return={this.enter} menuList={this.state.dataToSearch} locate={this.props.locate}/>;
-
     return (<div id="map">
       <div className="loader" id='spinner'></div>
       <Side value={this.state.value} dataSearch={this.state.dataSelect}/>

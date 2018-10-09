@@ -31,7 +31,7 @@ class Side extends React.Component {
       // console.log('asdd',this.props.dataSearch)
       try {
 
-        this.forceUpdate(this.setState({name: this.props.dataSearch.properties.f2, address: this.props.dataSearch.properties.f3, coordinates: this.props.dataSearch.properties.coordinates}));
+        this.forceUpdate(this.setState({name: this.props.dataSearch.properties.no, address: this.props.dataSearch.properties.f3cos_est, coordinates: this.props.dataSearch.properties.coordinates}));
         this.forceUpdate(this.render)
 
       } catch (e) {
@@ -55,84 +55,84 @@ class Side extends React.Component {
 
   getEstructura_id = () => {
     try {
-      return this.state.BaseStations.properties.f3;
+      return this.state.BaseStations.properties.cod_est;
     } catch (e) {
       return '';
     }
   }
   getEstructura = () => {
     try {
-      return this.state.BaseStations.properties.f4;
+      return this.state.BaseStations.properties.nom_sit;
     } catch (e) {
       return '';
     }
   }
   getProvincia = () => {
     try {
-      return this.state.BaseStations.properties.f5;
+      return this.state.BaseStations.properties.provincia;
     } catch (e) {
       return '';
     }
   }
   getCanton = () => {
     try {
-      return this.state.BaseStations.properties.f6;
+      return this.state.BaseStations.properties.canton;
     } catch (e) {
       return '';
     }
   }
   getParroquia = () => {
     try {
-      return this.state.BaseStations.properties.f7;
+      return this.state.BaseStations.properties.parroquia;
     } catch (e) {
       return '';
     }
   }
   getDireccion = () => {
     try {
-      return this.state.BaseStations.properties.f8;
+      return this.state.BaseStations.properties.dir;
     } catch (e) {
       return '';
     }
   }
   getCellID = () => {
     try {
-      return this.state.BaseStations.properties.f11;
+      return this.state.BaseStations.properties.cell_id;
     } catch (e) {
       return '';
     }
   }
   getTecnologia = () => {
     try {
-      return this.state.BaseStations.properties.f12;
+      return this.state.BaseStations.properties.tecnologia;
     } catch (e) {
       return '';
     }
   }
   getDensidad = () => {
     try {
-      return this.state.BaseStations.properties.f13;
+      return this.state.BaseStations.properties.densidad;
     } catch (e) {
       return '';
     }
   }
   getOperadora = () => {
     try {
-      return this.state.BaseStations.properties.f15;
+      return this.state.BaseStations.properties.operadora;
     } catch (e) {
       return '';
     }
   }
   getStatus = () => {
     try {
-      return this.state.BaseStations.properties.f16;
+      return this.state.BaseStations.properties.estado;
     } catch (e) {
       return '';
     }
   }
   getCoodenadas = () => {
     try {
-      return `${this.state.BaseStations.properties.f9}~${this.state.BaseStations.properties.f10}`
+      return `${this.state.BaseStations.properties.lat}~${this.state.BaseStations.properties.long}`
     } catch (e) {
       return '';
     }
@@ -161,16 +161,17 @@ class Side extends React.Component {
     // let elemento=<imageData existe={true}/>
     let elemento = <img src={this.logoOperadora()} className="br1 imageComponent" alt="avatar"/>;
     return (<div id="sidebar">
-      <h1 className="title">Información</h1>
+      <h3 className="title">Información</h3>
 
       {/* <h1>{value}</h1> */}
-      <ul className="list pl0 ml0 center mw7 ba b--light-silver br3 informationContainer">
-        <li className="info ph3 pv2 bb">{elemento}</li>
+      {/* <ul className="list pl0 ml0 center mw7 ba b--light-silver br3 informationContainer"> */}
+        {/* <li className="info">{elemento}</li> */}
 
-        <li className="info ph3 pv2 bb">
-          <div className="center br2 ba cardComponent">
-            <h4 className="white mv0 pv2 ph3 titleCardComponent">Radio Base</h4>
-            <div className="pa3 bt center">
+        {/* <li className="info"> */}
+          <div className="br2 ba cardComponent">
+            {/* <h4 className="white mv0 pv2 ph3 titleCardComponent">Radio Base</h4> */}
+            {elemento}
+            <div className="pa3 bt">
               <ListComponent title={'Cell ID'} content={this.getCellID()}/>
               <ListComponent title={'Provincia'} content={this.getProvincia()}/>
               <ListComponent title={'Canton'} content={this.getCanton()}/>
@@ -185,8 +186,8 @@ class Side extends React.Component {
               <ListComponent title={'Estructura ID'} content={this.getEstructura_id()}/>
             </div>
           </div>
-        </li>
-      </ul>
+        {/* </li>
+      </ul> */}
     </div>)
   }
 }
