@@ -9,6 +9,9 @@
 # production
 /build
 
+/src/components/map/save.js
+/src/components/map/Tareas.txt
+
 # misc
 .DS_Store
 .env.local
