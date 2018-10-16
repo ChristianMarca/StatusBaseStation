@@ -248,7 +248,7 @@ class Mapaj extends Component {
                           <Menu isOpen={this.state.menuOpen} onStateChange={(state) => this.handleStateChange(state)} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} width={350}>
                             <div className="panel">
                                 <h3 className="panelTitle">Search</h3>
-                                <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate}/>
+                                <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate} dataSelected={this.state.optionAcept}/>
                             </div>
                                 <h3 className="panelTitle">Operadora</h3>
                                 <div className='cf dib GroupButtons'>
