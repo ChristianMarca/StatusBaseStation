@@ -63,6 +63,8 @@ var markerCNT = L.markerClusterGroup({
 });
 
 var sidebar=null;
+
+
 class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -132,7 +134,23 @@ class Map extends React.Component {
     }))
   }
 
+  updateOnlineStatus=()=>{
+    console.log('User is online')
+    alert('hey')
+  }
+  
+  updateOfflineStatus=()=>{
+    console.log('usaer in ofsline')
+    alert('fasil')
+  }
+
   componentDidMount() {
+    // window.addEventListener('online', this.updateOnlineStatus, false);
+    // window.addEventListener('offline', this.updateOfflineStatus, false);
+    console.log('here', navigator.onLine)
+    if(!navigator.onLine){
+      alert('ok')
+    }
     this.map = L.map("map", {
       // layers: [L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
       // layers: [L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'})],
@@ -265,10 +283,11 @@ class Map extends React.Component {
   }
   locate = (data) => {
     this.setState({data: data})
+    console.log('El Fly',data)
     try {
       this.map.flyTo(L.latLng(data.coordinates[1], data.coordinates[0]), 18);
     } catch (err) {
-      // console.log(err)
+      console.log(err)
     }
   }
 
@@ -296,37 +315,8 @@ class Map extends React.Component {
     win.focus();
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.locate !== prevState.data ) {
-      return {
-        data: nextProps.locate,
-        changedata: null
-      };
-    }
-    if (nextProps.optionsButtons !== prevState.optionButtons) {
-      if(nextProps.optionsButtons.length!==0){
-        return{
-          lastButtons: nextProps.optionsButtons,
-          changeButtons: null
-        }
-      }
-      return{
-        changeButtons: undefined
-      }
-    }
-    return null;
-  }
-
-  componentDidUpdate(prevProps,prevState){
-    if(this.state.changedata===null){
-      try {
-        this.map.flyTo(L.latLng(this.state.data.coordinates[1], this.state.data.coordinates[0]), 18);
-      } catch (err) {
-        // console.log(err)
-      }
-    }
-    if((this.state.changeButtons===null) && (prevState.lastButtons!==this.props.optionsButtons) ){
-      document.getElementById("spinner").style.visibility = "visible";
+  dataRequestUpdate=async()=>{
+    document.getElementById("spinner").style.visibility = "visible";
       try {
         markerConecel.clearLayers();
         markerOtecel.clearLayers();
@@ -389,6 +379,51 @@ class Map extends React.Component {
       } catch (err) {
         // console.log(err)
       }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.locate !== prevState.data) {
+      if(Object.entries(nextProps.locate).length !== 0){
+        return {
+          data: nextProps.locate,
+          changedata: null
+        };
+      }
+    }
+    if (nextProps.optionsButtons !== prevState.lastButtons) {
+      if(nextProps.optionsButtons.length!==0){
+        return{
+          lastButtons: nextProps.optionsButtons,
+          changeButtons: null
+        }
+      }
+      // return{
+      //   changeButtons: undefined
+      // }
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps,prevState){
+    if((this.state.changedata===null) && (prevState.data!==this.props.locate)){
+      // console.log('El fly 1 ', this.state.data)
+      console.log('datsa', this.props,this.props.optionsButtons)
+      try {
+        // this.map.flyTo(L.latLng(this.state.data.coordinates[1], this.state.data.coordinates[0]), 18);
+        this.map.flyTo(L.latLng(this.state.data.lat_dec, this.state.data.long_dec), 18);
+      } catch (err) {
+        // console.log(err)
+      }
+    }
+    if((this.state.changeButtons===null) && (prevState.lastButtons!==this.props.optionsButtons) ){
+      //console.log(prevState.lastButtons, this.props.optionsButtons,'vclick')
+      //if(this.props.optionsButtons!==0){
+        this._asyncRequestUpdate=this.dataRequestUpdate().then(()=>this._asyncRequestUpdate=null);
+        this.setState({changeButtons:undefined})
+      //}else{
+        //this._asyncRequest=this.dataRequest().then(()=>this._asyncRequest=null);
+      //}
+      
     }
   }
 

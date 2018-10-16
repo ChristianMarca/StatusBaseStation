@@ -20,8 +20,8 @@ class CajaTxt extends React.Component {
       parroquiaSuggestions: [],
 
       informationValue:{},
-
-      RadioBases: this.props.menuList,
+      RadioBases:[]
+      //RadioBases: this.props.menuList,
     };
 
     ///##codigo 1########
@@ -32,16 +32,15 @@ class CajaTxt extends React.Component {
     // this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  componentWillReceiveProps(nextProps){
-    // const {menuList}=this.props;
-    // console.log('astisdsdff',menuList)
+  // componentWillReceiveProps(nextProps){
+  //   // const {menuList}=this.props;
+  //   // console.log('astisdsdff',menuList)
 
-    this.setState({RadioBases: nextProps.menuList})
+  //   this.setState({RadioBases: nextProps.menuList})
 
-  // console.log('Casi al fina',this.state.RadioBases)
-    //console.log('radiobases',this.state.RadioBases)
-  }
-
+  // // console.log('Casi al fina',this.state.RadioBases)
+  //   //console.log('radiobases',this.state.RadioBases)
+  // }
   escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
@@ -49,7 +48,7 @@ class CajaTxt extends React.Component {
   getSuggestions(value) {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
-
+    console.log(this.state.RadioBases)
     return this.state.RadioBases.filter(user => regex.test(user.nom_sit) || regex.test(user.cell_id) || regex.test(user.dir) || regex.test(user.parroquia));
   }
 
@@ -75,7 +74,33 @@ class CajaTxt extends React.Component {
     );
   }
 
+  // onChangeEst = (event, { newValue }) => {
+  //   newValue.length>=2 && fetch.get(`http://192.168.1.102:3000/radioBases/test?nom_sit=${newValue}`)
+  //   .then(resp=>resp.json())
+  //   .then(resp=>{
+  //     console.log(resp)
+  //     this.setState({RadioBases: resp.data})
+  //   })
+  //   .catch(console.log)
+  //   this.setState({
+  //     Est: String(newValue)
+  //   });
+  // };
+
   onestChange = (event, { newValue }) => {
+    console.log(this.props.dataSelected,'thistadas')
+    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?nom_sit=${newValue}`,
+      {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({dataSelected: this.props.dataSelected})
+      })
+    .then(resp=>resp.json())
+    .then(resp=>{
+      !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
+    })
     this.setState({
       estValue: newValue
     });
@@ -84,6 +109,12 @@ class CajaTxt extends React.Component {
   };
 
   oncell_idChange = (event, { newValue }) => {
+    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?cell_id=${newValue}`)
+    .then(resp=>resp.json())
+    .then(resp=>{
+      //this.setState({RadioBases: resp.data})
+      !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
+    })
     this.setState({
       cell_idValue: newValue
     });
@@ -92,6 +123,12 @@ class CajaTxt extends React.Component {
   };
 
   ondireccionChange = (event, { newValue }) => {
+    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?dir=${newValue}`)
+    .then(resp=>resp.json())
+    .then(resp=>{
+      //this.setState({RadioBases: resp})
+      !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
+    })
     this.setState({
       direccionValue: newValue
     });
@@ -100,6 +137,11 @@ class CajaTxt extends React.Component {
   };
 
   onparroquiaChange = (event, { newValue }) => {
+    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?parroquia=${newValue}`)
+    .then(resp=>resp.json())
+    .then(resp=>{
+        !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
+    })
     this.setState({
       parroquiaValue: newValue
     });
@@ -145,7 +187,6 @@ class CajaTxt extends React.Component {
   };
 
   oncell_idSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-    //console.log(method)
     this.setState({
       estValue: String(suggestion.nom_sit),
       direccionValue: String(suggestion.dir),
