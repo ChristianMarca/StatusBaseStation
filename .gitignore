@@ -11,6 +11,7 @@
 
 /src/components/map/save.js
 /src/components/map/Tareas.txt
+/src/components/map/SuggestFields_online.js
 
 # misc
 .DS_Store
