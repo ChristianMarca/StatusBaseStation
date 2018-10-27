@@ -22,6 +22,8 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
 
+import Dexie from "dexie";
+
 var markerConecel = L.markerClusterGroup({
   spiderfyOnMaxZoom: true,
   showCoverageOnHover: true,
@@ -63,6 +65,10 @@ var markerCNT = L.markerClusterGroup({
 });
 
 var sidebar=null;
+
+var conecelObj=[];
+var otecelObj=[];
+var cntObj=[];
 
 
 class Map extends React.Component {
@@ -223,42 +229,50 @@ class Map extends React.Component {
 
   dataRequest=async()=>{
     this.props.isDashboardComponent!==true?(()=>{
-      fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
-      var rbTodo = {
-        features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
-        type: "FeatureCollection"
-      }
-      this.getData(rbTodo).then(datos => {
-        this.setState({dataToSearch: datos})
-        handleData(datos)
-        return datos
-      });
+    //   fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
+    //   console.log(myData)
+    //   //Creacion de la instancia
+    //   // const db= new Dexie("Rb")
 
-      return [this.clusterFunction(myData.conecel),this.clusterFunction(myData.otecel), this.clusterFunction(myData.cnt)]
+    //   //Define el esquema
+    //   // db.version(1).stores({
+    //   //   conecel_:null
+    //   // })
 
-    }).then((barLayer) => {
-      markerConecel.addLayer(barLayer[0]);
+    //   // var rbTodo = {
+    //     // features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
+    //     // type: "FeatureCollection"
+    //   // }
+    //   // console.log('rbtodo',rbTodo)
+    //   // this.getData(rbTodo).then(datos => {
+    //     // this.setState({dataToSearch: datos})
+    //     // handleData(datos)
+    //     // return datos
+    //   // });
+    //   const returning_=this.indexedDBFetching()
+    //   console.log('ele returning', returning_)
+    //   return myData
+    // })
+    this.indexedDBFetching()
+    .then((myData) => {
+      markerConecel.addLayer(this.clusterFunction(myData.conecel));
       this.map.addLayer(markerConecel);
 
-      markerOtecel.addLayer(barLayer[1]);
+      markerOtecel.addLayer(this.clusterFunction(myData.otecel));
       this.map.addLayer(markerOtecel);
 
-      markerCNT.addLayer(barLayer[2]);
+      markerCNT.addLayer(this.clusterFunction(myData.cnt));
       this.map.addLayer(markerCNT);
-
       document.getElementById("spinner").style.visibility = "hidden";
     }).catch(err => console.log(err))
-    //Fin de funcion de pedido de datos
-
-    const handleData = (datos) => {
-      this.props.obtainList(datos)
-    }
-    
+    // const handleData = (datos) => {
+    //   this.props.obtainList(datos)
+    // }
     this.props.isDashboardComponent!==true &&
     L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
       clickMenu()
@@ -276,6 +290,136 @@ class Map extends React.Component {
     // setTimeout(function() {
     //   sidebar.hide();
     // }, 1500);
+  }
+
+  indexedDBFetching=async()=>{
+    const getObjectConvert=(item,type='union')=>{
+      if(type==="destruct"){
+        return {
+          geometry: item.geometry,
+          canton: item.properties.canton,
+          cell_id: item.properties.cell_id,
+          cod_est: item.properties.cell_id,
+          densidad: item.properties.densidad,
+          dir: item.properties.dir,
+          estado: item.properties.estado,
+          geom: item.properties.geom,
+          id_bs: item.properties.id_bs,
+          lat: item.properties.lat,
+          lat_dec: item.properties.lat_dec,
+          long: item.properties.long,
+          long_dec: item.properties.long_dec,
+          nom_sit: item.properties.nom_sit,
+          num: item.properties.num,
+          operadora: item.properties.operadora,
+          parroquia: item.properties.parroquia,
+          provincia: item.properties.provincia,
+          tecnologia: item.properties.tecnologia
+        }
+      }
+      else{
+        return {
+          geometry: item.geometry,
+          properties: {
+            canton: item.canton,
+            cell_id: item.cell_id,
+            cod_est: item.cell_id,
+            densidad: item.densidad,
+            dir: item.dir,
+            estado: item.estado,
+            geom: item.geom,
+            id_bs: item.id_bs,
+            lat: item.lat,
+            lat_dec: item.lat_dec,
+            long: item.long,
+            long_dec: item.long_dec,
+            nom_sit: item.nom_sit,
+            num: item.num,
+            operadora: item.operadora,
+            parroquia: item.parroquia,
+            provincia: item.provincia,
+            tecnologia: item.tecnologia
+          },
+          type:"Feature"
+        }
+      }
+    }
+    var db = new Dexie('Rb');
+    db.version(1).stores({
+        conecel_: "++id,nom_sit,cell_id,dir,parroquia, operadora",
+        otecel_: "++id,nom_sit,cell_id,dir,parroquia, operadora",
+        cnt_: "++id,nom_sit,cell_id,dir,parroquia, operadora",
+    });
+    db.on('ready', function () {
+        return db.conecel_.count(function (count) {
+            if (count > 0) {
+                console.log("Datos Almacenados");
+            } else {
+                console.log("Database is empty. Iniciando peticion al servidor...");
+                return new Promise(function (resolve, reject) {
+                  fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }).then(response => response.json()).then(datosnuev => resolve(datosnuev.jsonData))
+                  .catch(err=>reject(err))
+                  }).then(function (data) {
+                    console.log("No existe data, se realizara un Fetch");
+                    return [
+                      db.transaction('rw', db.conecel_, function () {
+                        data.conecel.features.forEach(function (item) {
+                          db.conecel_.add(getObjectConvert(item,"destruct"));
+                        });
+                      }),
+                      db.transaction('rw', db.otecel_, function () {
+                        data.otecel.features.forEach(function (item) {
+                          db.otecel_.add(getObjectConvert(item,"destruct"));
+                        });
+                      }),
+                      db.transaction('rw', db.cnt_, function () {
+                        data.cnt.features.forEach(function (item) {
+                          db.cnt_.add(getObjectConvert(item,"destruct"));
+                        });
+                      })
+                    ]
+                }).then(function () {
+                    console.log ("Transaccion Completada");
+                });
+            }
+        });
+    });
+
+    db.open();
+
+    return db.conecel_.each(function (obj) {
+        conecelObj.push(getObjectConvert(obj,"union"))
+    }).then(function (feat) {
+        return db.otecel_.each(function (obj) {
+          otecelObj.push(getObjectConvert(obj))
+        }).then(function (feat) {
+            return db.cnt_.each(function (obj) {
+              cntObj.push(getObjectConvert(obj))
+            }).then(function (feat) {
+              console.log('Extraccion de datos completada');
+                return ({
+                  conecel:{features: conecelObj},
+                  otecel:{features: otecelObj},
+                  cnt:{features: cntObj}
+              })
+            }).catch(function (error) {
+                console.error(error.stack || error);
+            });
+        }).catch(function (error) {
+            console.error(error.stack || error);
+        });
+    }).catch(function (error) {
+        console.error(error.stack || error);
+    });
+    // db.transaction('rw',db.conecel_,function(){
+    //   db.conecel_.where("parroquia").equals("CUENCA")
+    //     .or("cell_id").equals("24216").each(console.log)
+    // })
   }
 
   enter = (value) => {
@@ -407,7 +551,7 @@ class Map extends React.Component {
   componentDidUpdate(prevProps,prevState){
     if((this.state.changedata===null) && (prevState.data!==this.props.locate)){
       // console.log('El fly 1 ', this.state.data)
-      console.log('datsa', this.props,this.props.optionsButtons)
+      //console.log('datsa', this.props,this.props.optionsButtons)
       try {
         // this.map.flyTo(L.latLng(this.state.data.coordinates[1], this.state.data.coordinates[0]), 18);
         this.map.flyTo(L.latLng(this.state.data.lat_dec, this.state.data.long_dec), 18);

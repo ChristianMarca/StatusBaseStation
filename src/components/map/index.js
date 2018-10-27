@@ -5,15 +5,19 @@ import {CajaTxt} from '../search/loc';
 import styled from "styled-components"
 import {slide as Menu} from 'react-burger-menu';
 import {Navbar} from '../Navbar';
+import Modal from "../Modal/Modal";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.js"
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css";
 import './map.css'
+
+import Advisement from "../advisements/advisement";
 
 class Mapaj extends Component {
 
   constructor(props, context) {
     super(props, context);
     this.state = {
+      isAdvisementOpen:true,
       markerPosition: {
         lat: 49.8419,
         lng: 24.0315
@@ -239,6 +243,15 @@ class Mapaj extends Component {
 
           }
 
+          toogleModal=()=>{
+            this.setState(prevState=>(
+                {
+                    ...prevState,
+                    isAdvisementOpen: !prevState.isAdvisementOpen
+                }
+            ) )
+          }
+
           render() {
             const {markerPosition} = this.state;
             return (<div className="container" id="outer-container page-wrap">
@@ -270,6 +283,11 @@ class Mapaj extends Component {
                         <this.Column xs='12' sm='12' md='12'>
                           <this.MapaScroll className='mapa'>
                             <Map isDashboardComponent={false} markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)} optionsButtons={this.state.optionAcept}/>
+                            {this.state.isAdvisementOpen &&
+                              <Modal>
+                                <Advisement isAdvisementOpen={this.state.isAdvisementOpen} toogleModal={this.toogleModal}/>
+                              </Modal>
+                            }
                           </this.MapaScroll>
                         </this.Column>
                       </this.Row>
