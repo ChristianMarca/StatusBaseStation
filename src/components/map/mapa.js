@@ -21,8 +21,7 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
-
-import Dexie from "dexie";
+import DataStorage from '../../configs/index';
 
 var markerConecel = L.markerClusterGroup({
   spiderfyOnMaxZoom: true,
@@ -65,11 +64,6 @@ var markerCNT = L.markerClusterGroup({
 });
 
 var sidebar=null;
-
-var conecelObj=[];
-var otecelObj=[];
-var cntObj=[];
-
 
 class Map extends React.Component {
   constructor(props) {
@@ -153,7 +147,7 @@ class Map extends React.Component {
   componentDidMount() {
     // window.addEventListener('online', this.updateOnlineStatus, false);
     // window.addEventListener('offline', this.updateOfflineStatus, false);
-    console.log('here', navigator.onLine)
+    console.log('Verifiacar Estado Online', navigator.onLine)
     if(!navigator.onLine){
       alert('ok')
     }
@@ -228,62 +222,35 @@ class Map extends React.Component {
   }
 
   dataRequest=async()=>{
-    this.props.isDashboardComponent!==true?(()=>{
-    //   fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
-    //   console.log(myData)
-    //   //Creacion de la instancia
-    //   // const db= new Dexie("Rb")
+    const DataStorageClass= new DataStorage();
+    this.props.isDashboardComponent!==true?(()=>{window.localStorage.getItem('acceptAdvisement')
+      const selectTypeRequest=DataStorageClass.fetchRadioBases(!window.localStorage.getItem('acceptAdvisement'));
+      console.log(selectTypeRequest,"es una promesa")
+      selectTypeRequest.then((myData) => {
+        markerConecel.addLayer(this.clusterFunction(myData.conecel));
+        this.map.addLayer(markerConecel);
 
-    //   //Define el esquema
-    //   // db.version(1).stores({
-    //   //   conecel_:null
-    //   // })
+        markerOtecel.addLayer(this.clusterFunction(myData.otecel));
+        this.map.addLayer(markerOtecel);
 
-    //   // var rbTodo = {
-    //     // features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
-    //     // type: "FeatureCollection"
-    //   // }
-    //   // console.log('rbtodo',rbTodo)
-    //   // this.getData(rbTodo).then(datos => {
-    //     // this.setState({dataToSearch: datos})
-    //     // handleData(datos)
-    //     // return datos
-    //   // });
-    //   const returning_=this.indexedDBFetching()
-    //   console.log('ele returning', returning_)
-    //   return myData
-    // })
-    this.indexedDBFetching()
-    .then((myData) => {
-      markerConecel.addLayer(this.clusterFunction(myData.conecel));
-      this.map.addLayer(markerConecel);
+        markerCNT.addLayer(this.clusterFunction(myData.cnt));
+        this.map.addLayer(markerCNT);
+        document.getElementById("spinner").style.visibility = "hidden";
+      }).catch(err => console.log(err))
+      // const handleData = (datos) => {
+      //   this.props.obtainList(datos)
+      // }
+      this.props.isDashboardComponent!==true &&
+      L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
+        clickMenu()
 
-      markerOtecel.addLayer(this.clusterFunction(myData.otecel));
-      this.map.addLayer(markerOtecel);
+      }).addTo(this.map);
 
-      markerCNT.addLayer(this.clusterFunction(myData.cnt));
-      this.map.addLayer(markerCNT);
-      document.getElementById("spinner").style.visibility = "hidden";
-    }).catch(err => console.log(err))
-    // const handleData = (datos) => {
-    //   this.props.obtainList(datos)
-    // }
-    this.props.isDashboardComponent!==true &&
-    L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
-      clickMenu()
-
-    }).addTo(this.map);
-
-    const clickMenu = () => {
-      this.props.search('click')
-    }
-    })()
-    :alert('sorry')
+      const clickMenu = () => {
+        this.props.search('click')
+      }
+      })()
+      :alert('sorry')
     // setTimeout(function() {
     //   sidebar.show();
     // }, 500);
@@ -292,135 +259,7 @@ class Map extends React.Component {
     // }, 1500);
   }
 
-  indexedDBFetching=async()=>{
-    const getObjectConvert=(item,type='union')=>{
-      if(type==="destruct"){
-        return {
-          geometry: item.geometry,
-          canton: item.properties.canton,
-          cell_id: item.properties.cell_id,
-          cod_est: item.properties.cell_id,
-          densidad: item.properties.densidad,
-          dir: item.properties.dir,
-          estado: item.properties.estado,
-          geom: item.properties.geom,
-          id_bs: item.properties.id_bs,
-          lat: item.properties.lat,
-          lat_dec: item.properties.lat_dec,
-          long: item.properties.long,
-          long_dec: item.properties.long_dec,
-          nom_sit: item.properties.nom_sit,
-          num: item.properties.num,
-          operadora: item.properties.operadora,
-          parroquia: item.properties.parroquia,
-          provincia: item.properties.provincia,
-          tecnologia: item.properties.tecnologia
-        }
-      }
-      else{
-        return {
-          geometry: item.geometry,
-          properties: {
-            canton: item.canton,
-            cell_id: item.cell_id,
-            cod_est: item.cell_id,
-            densidad: item.densidad,
-            dir: item.dir,
-            estado: item.estado,
-            geom: item.geom,
-            id_bs: item.id_bs,
-            lat: item.lat,
-            lat_dec: item.lat_dec,
-            long: item.long,
-            long_dec: item.long_dec,
-            nom_sit: item.nom_sit,
-            num: item.num,
-            operadora: item.operadora,
-            parroquia: item.parroquia,
-            provincia: item.provincia,
-            tecnologia: item.tecnologia
-          },
-          type:"Feature"
-        }
-      }
-    }
-    var db = new Dexie('Rb');
-    db.version(1).stores({
-        conecel_: "++id,nom_sit,cell_id,dir,parroquia, operadora",
-        otecel_: "++id,nom_sit,cell_id,dir,parroquia, operadora",
-        cnt_: "++id,nom_sit,cell_id,dir,parroquia, operadora",
-    });
-    db.on('ready', function () {
-        return db.conecel_.count(function (count) {
-            if (count > 0) {
-                console.log("Datos Almacenados");
-            } else {
-                console.log("Database is empty. Iniciando peticion al servidor...");
-                return new Promise(function (resolve, reject) {
-                  fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
-                    method: 'GET',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    }
-                  }).then(response => response.json()).then(datosnuev => resolve(datosnuev.jsonData))
-                  .catch(err=>reject(err))
-                  }).then(function (data) {
-                    console.log("No existe data, se realizara un Fetch");
-                    return [
-                      db.transaction('rw', db.conecel_, function () {
-                        data.conecel.features.forEach(function (item) {
-                          db.conecel_.add(getObjectConvert(item,"destruct"));
-                        });
-                      }),
-                      db.transaction('rw', db.otecel_, function () {
-                        data.otecel.features.forEach(function (item) {
-                          db.otecel_.add(getObjectConvert(item,"destruct"));
-                        });
-                      }),
-                      db.transaction('rw', db.cnt_, function () {
-                        data.cnt.features.forEach(function (item) {
-                          db.cnt_.add(getObjectConvert(item,"destruct"));
-                        });
-                      })
-                    ]
-                }).then(function () {
-                    console.log ("Transaccion Completada");
-                });
-            }
-        });
-    });
-
-    db.open();
-
-    return db.conecel_.each(function (obj) {
-        conecelObj.push(getObjectConvert(obj,"union"))
-    }).then(function (feat) {
-        return db.otecel_.each(function (obj) {
-          otecelObj.push(getObjectConvert(obj))
-        }).then(function (feat) {
-            return db.cnt_.each(function (obj) {
-              cntObj.push(getObjectConvert(obj))
-            }).then(function (feat) {
-              console.log('Extraccion de datos completada');
-                return ({
-                  conecel:{features: conecelObj},
-                  otecel:{features: otecelObj},
-                  cnt:{features: cntObj}
-              })
-            }).catch(function (error) {
-                console.error(error.stack || error);
-            });
-        }).catch(function (error) {
-            console.error(error.stack || error);
-        });
-    }).catch(function (error) {
-        console.error(error.stack || error);
-    });
-    // db.transaction('rw',db.conecel_,function(){
-    //   db.conecel_.where("parroquia").equals("CUENCA")
-    //     .or("cell_id").equals("24216").each(console.log)
-    // })
-  }
+  
 
   enter = (value) => {
     this.setState({value})
@@ -465,25 +304,30 @@ class Map extends React.Component {
         markerConecel.clearLayers();
         markerOtecel.clearLayers();
         markerCNT.clearLayers();
-
-        fetch('http://192.168.1.102:3000/mapa/filter_radiobase', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({campos: this.props.optionsButtons})
-        }).then(response => {return response.json()})//.then(jsonData => {
+        const DataStorageFilter= new DataStorage();
+        window.localStorage.getItem('acceptAdvisement')?
+        DataStorageFilter.fetchRadioBasesFilter(this.props.optionsButtons,window.localStorage.getItem('acceptAdvisement'))
+        .then((myData) => {
+          markerConecel.addLayer(this.clusterFunction(myData.conecel));
+          this.map.addLayer(markerConecel);
+  
+          markerOtecel.addLayer(this.clusterFunction(myData.otecel));
+          this.map.addLayer(markerOtecel);
+  
+          markerCNT.addLayer(this.clusterFunction(myData.cnt));
+          this.map.addLayer(markerCNT);
+          document.getElementById("spinner").style.visibility = "hidden";
+        }).catch(err => console.log(err))
+        :
+        DataStorageFilter.fetchRadioBasesFilter(this.props.optionsButtons,window.localStorage.getItem('acceptAdvisement'))
+        .then(response => {return response.json()})//.then(jsonData => {
           .then(datosnuev => datosnuev.jsonData).then(myData => {
-          //keys = [];
           var keys = Object.keys(myData);
           var acumm = [];
-
           var layersComplete = keys.map((actual, indice)=> {
-
             if (myData[keys[indice]]['features']!==null){
               acumm = acumm.concat(myData[keys[indice]]['features'])
             }
-
             return this.clusterFunction(myData[keys[indice]]['features'])
           })
           var rbTodo = {

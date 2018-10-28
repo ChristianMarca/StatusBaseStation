@@ -1,5 +1,6 @@
 import React from "react";
 import Autosuggest from "react-autosuggest/dist/Autosuggest";
+import DataStorage from "../../configs/index";
 import './style.css'
 
 class CajaTxt extends React.Component {
@@ -48,7 +49,7 @@ class CajaTxt extends React.Component {
   getSuggestions(value) {
     const escapedValue = this.escapeRegexCharacters(value.trim());
     const regex = new RegExp('^' + escapedValue, 'i');
-    console.log(this.state.RadioBases)
+    // console.log(this.state.RadioBases)
     return this.state.RadioBases.filter(user => regex.test(user.nom_sit) || regex.test(user.cell_id) || regex.test(user.dir) || regex.test(user.parroquia));
   }
 
@@ -88,16 +89,10 @@ class CajaTxt extends React.Component {
   // };
 
   onestChange = (event, { newValue }) => {
-    console.log(this.props.dataSelected,'thistadas')
-    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?nom_sit=${newValue}`,
-      {
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({dataSelected: this.props.dataSelected})
-      })
-    .then(resp=>resp.json())
+    // console.log(this.props.dataSelected,'thistadas')
+    const DataStorageSuggestNom_Sit= new DataStorage();
+    newValue.length>=2 && 
+      DataStorageSuggestNom_Sit.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"nom_sit",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
       !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
     })
@@ -109,8 +104,11 @@ class CajaTxt extends React.Component {
   };
 
   oncell_idChange = (event, { newValue }) => {
-    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?cell_id=${newValue}`)
-    .then(resp=>resp.json())
+    const DataStorageSuggestCell_Id= new DataStorage();
+    // newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?cell_id=${newValue}`)
+    // .then(resp=>resp.json())
+    newValue.length>=2 && 
+      DataStorageSuggestCell_Id.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"cell_id",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
       //this.setState({RadioBases: resp.data})
       !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
@@ -123,8 +121,11 @@ class CajaTxt extends React.Component {
   };
 
   ondireccionChange = (event, { newValue }) => {
-    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?dir=${newValue}`)
-    .then(resp=>resp.json())
+    const DataStorageSuggestDir= new DataStorage();
+    // newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?dir=${newValue}`)
+    // .then(resp=>resp.json())
+    newValue.length>=2 && 
+      DataStorageSuggestDir.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"dir",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
       //this.setState({RadioBases: resp})
       !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
@@ -137,8 +138,11 @@ class CajaTxt extends React.Component {
   };
 
   onparroquiaChange = (event, { newValue }) => {
-    newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?parroquia=${newValue}`)
-    .then(resp=>resp.json())
+    const DataStorageSuggest= new DataStorage();
+    // newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?parroquia=${newValue}`)
+    // .then(resp=>resp.json())
+    newValue.length>=2 && 
+      DataStorageSuggest.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"parroquia",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
         !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
     })

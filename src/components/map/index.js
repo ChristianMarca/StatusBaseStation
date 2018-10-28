@@ -282,8 +282,10 @@ class Mapaj extends Component {
                         </this.Column>
                         <this.Column xs='12' sm='12' md='12'>
                           <this.MapaScroll className='mapa'>
-                            <Map isDashboardComponent={false} markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)} optionsButtons={this.state.optionAcept}/>
-                            {this.state.isAdvisementOpen &&
+                            {(!this.state.isAdvisementOpen || window.localStorage.getItem('acceptAdvisement')) &&
+                              <Map isDashboardComponent={false} markerPosition={markerPosition} obtainList={this.obtainList.bind(this)} locate={this.state.locate} search={this.searchMenu.bind(this)} optionsButtons={this.state.optionAcept}/>
+                            }
+                            {(this.state.isAdvisementOpen && !window.localStorage.getItem('acceptAdvisement')) &&
                               <Modal>
                                 <Advisement isAdvisementOpen={this.state.isAdvisementOpen} toogleModal={this.toogleModal}/>
                               </Modal>

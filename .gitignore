@@ -12,6 +12,7 @@
 /src/components/map/save.js
 /src/components/map/Tareas.txt
 /src/components/map/SuggestFields_online.js
+/src/configs/copy.js
 
 # misc
 .DS_Store
