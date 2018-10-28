@@ -21,6 +21,7 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.css"
 
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.js';
 import 'leaflet-slidemenu/src/L.Control.SlideMenu.css'
+import DataStorage from '../../configs/index';
 
 var markerConecel = L.markerClusterGroup({
   spiderfyOnMaxZoom: true,
@@ -63,7 +64,6 @@ var markerCNT = L.markerClusterGroup({
 });
 
 var sidebar=null;
-
 
 class Map extends React.Component {
   constructor(props) {
@@ -147,7 +147,7 @@ class Map extends React.Component {
   componentDidMount() {
     // window.addEventListener('online', this.updateOnlineStatus, false);
     // window.addEventListener('offline', this.updateOfflineStatus, false);
-    console.log('here', navigator.onLine)
+    console.log('Verifiacar Estado Online', navigator.onLine)
     if(!navigator.onLine){
       alert('ok')
     }
@@ -222,54 +222,35 @@ class Map extends React.Component {
   }
 
   dataRequest=async()=>{
-    this.props.isDashboardComponent!==true?(()=>{
-      fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+    const DataStorageClass= new DataStorage();
+    this.props.isDashboardComponent!==true?(()=>{window.localStorage.getItem('acceptAdvisement')
+      const selectTypeRequest=DataStorageClass.fetchRadioBases(!window.localStorage.getItem('acceptAdvisement'));
+      console.log(selectTypeRequest,"es una promesa")
+      selectTypeRequest.then((myData) => {
+        markerConecel.addLayer(this.clusterFunction(myData.conecel));
+        this.map.addLayer(markerConecel);
+
+        markerOtecel.addLayer(this.clusterFunction(myData.otecel));
+        this.map.addLayer(markerOtecel);
+
+        markerCNT.addLayer(this.clusterFunction(myData.cnt));
+        this.map.addLayer(markerCNT);
+        document.getElementById("spinner").style.visibility = "hidden";
+      }).catch(err => console.log(err))
+      // const handleData = (datos) => {
+      //   this.props.obtainList(datos)
+      // }
+      this.props.isDashboardComponent!==true &&
+      L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
+        clickMenu()
+
+      }).addTo(this.map);
+
+      const clickMenu = () => {
+        this.props.search('click')
       }
-    }).then(response => response.json()).then(datosnuev => datosnuev.jsonData).then(myData => {
-      var rbTodo = {
-        features:(myData.conecel.features.concat(myData.otecel.features, myData.cnt.features)),
-        type: "FeatureCollection"
-      }
-      this.getData(rbTodo).then(datos => {
-        this.setState({dataToSearch: datos})
-        handleData(datos)
-        return datos
-      });
-
-      return [this.clusterFunction(myData.conecel),this.clusterFunction(myData.otecel), this.clusterFunction(myData.cnt)]
-
-    }).then((barLayer) => {
-      markerConecel.addLayer(barLayer[0]);
-      this.map.addLayer(markerConecel);
-
-      markerOtecel.addLayer(barLayer[1]);
-      this.map.addLayer(markerOtecel);
-
-      markerCNT.addLayer(barLayer[2]);
-      this.map.addLayer(markerCNT);
-
-      document.getElementById("spinner").style.visibility = "hidden";
-    }).catch(err => console.log(err))
-    //Fin de funcion de pedido de datos
-
-    const handleData = (datos) => {
-      this.props.obtainList(datos)
-    }
-    
-    this.props.isDashboardComponent!==true &&
-    L.easyButton('https://cdn2.iconfinder.com/data/icons/filled-icons/493/Search-512.png', function(btn, map) {
-      clickMenu()
-
-    }).addTo(this.map);
-
-    const clickMenu = () => {
-      this.props.search('click')
-    }
-    })()
-    :alert('sorry')
+      })()
+      :alert('sorry')
     // setTimeout(function() {
     //   sidebar.show();
     // }, 500);
@@ -277,6 +258,8 @@ class Map extends React.Component {
     //   sidebar.hide();
     // }, 1500);
   }
+
+  
 
   enter = (value) => {
     this.setState({value})
@@ -321,25 +304,30 @@ class Map extends React.Component {
         markerConecel.clearLayers();
         markerOtecel.clearLayers();
         markerCNT.clearLayers();
-
-        fetch('http://192.168.1.102:3000/mapa/filter_radiobase', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({campos: this.props.optionsButtons})
-        }).then(response => {return response.json()})//.then(jsonData => {
+        const DataStorageFilter= new DataStorage();
+        window.localStorage.getItem('acceptAdvisement')?
+        DataStorageFilter.fetchRadioBasesFilter(this.props.optionsButtons,window.localStorage.getItem('acceptAdvisement'))
+        .then((myData) => {
+          markerConecel.addLayer(this.clusterFunction(myData.conecel));
+          this.map.addLayer(markerConecel);
+  
+          markerOtecel.addLayer(this.clusterFunction(myData.otecel));
+          this.map.addLayer(markerOtecel);
+  
+          markerCNT.addLayer(this.clusterFunction(myData.cnt));
+          this.map.addLayer(markerCNT);
+          document.getElementById("spinner").style.visibility = "hidden";
+        }).catch(err => console.log(err))
+        :
+        DataStorageFilter.fetchRadioBasesFilter(this.props.optionsButtons,window.localStorage.getItem('acceptAdvisement'))
+        .then(response => {return response.json()})//.then(jsonData => {
           .then(datosnuev => datosnuev.jsonData).then(myData => {
-          //keys = [];
           var keys = Object.keys(myData);
           var acumm = [];
-
           var layersComplete = keys.map((actual, indice)=> {
-
             if (myData[keys[indice]]['features']!==null){
               acumm = acumm.concat(myData[keys[indice]]['features'])
             }
-
             return this.clusterFunction(myData[keys[indice]]['features'])
           })
           var rbTodo = {
@@ -407,7 +395,7 @@ class Map extends React.Component {
   componentDidUpdate(prevProps,prevState){
     if((this.state.changedata===null) && (prevState.data!==this.props.locate)){
       // console.log('El fly 1 ', this.state.data)
-      console.log('datsa', this.props,this.props.optionsButtons)
+      //console.log('datsa', this.props,this.props.optionsButtons)
       try {
         // this.map.flyTo(L.latLng(this.state.data.coordinates[1], this.state.data.coordinates[0]), 18);
         this.map.flyTo(L.latLng(this.state.data.lat_dec, this.state.data.long_dec), 18);
