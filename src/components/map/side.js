@@ -1,5 +1,5 @@
 import React from 'react';
-import {CajaTxt} from '../search/loc';
+import {SearchFields} from '../search/loc';
 import './map.css';
 import 'tachyons';
 import L from "leaflet";
@@ -213,6 +213,7 @@ class SideMenu extends React.Component {
   }
 
   locate = (data) => {
+    console.log('here side level',data)
     this.props.locate(data)
   }
 
@@ -280,7 +281,7 @@ class SideMenu extends React.Component {
     //console.log('hubo un cambio', menu)
     const {menuList} = this.props;
 
-    const element = this._div.innerHTML = <CajaTxt className='menu' value={this.changeName.toString()} menuList={menuList} locate={this.locate}/>
+    const element = this._div.innerHTML = <SearchFields className='menu' value={this.changeName.toString()} menuList={menuList} locate={this.locate}/>
     const eleme = <button onClick={this.handleOpenModal}>Trigger Modal</button>
     // this. _disableClickPropagation(eleme)
     // L.DomEvent.stopPropagation(element);

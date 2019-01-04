@@ -3,7 +3,7 @@ import Autosuggest from "react-autosuggest/dist/Autosuggest";
 import DataStorage from "../../configs/index";
 import './style.css'
 
-class CajaTxt extends React.Component {
+class SearchFields extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +21,8 @@ class CajaTxt extends React.Component {
       parroquiaSuggestions: [],
 
       informationValue:{},
-      RadioBases:[]
+      RadioBases:[],
+      isNewEnterKey: false
       //RadioBases: this.props.menuList,
     };
 
@@ -171,11 +172,11 @@ class CajaTxt extends React.Component {
       direccionValue: String(suggestion.dir),
       parroquiaValue: String(suggestion.parroquia),
       informationValue: suggestion,
-
-    });
-    this.props.locate(this.state.informationValue)
+    },
+      this.props.locate(suggestion)
+    );
     event.preventDefault();
-    event.stopPropagation();
+    // event.stopPropagation();
   };
 
   oncell_idSuggestionsFetchRequested = ({ value }) => {
@@ -196,10 +197,11 @@ class CajaTxt extends React.Component {
       direccionValue: String(suggestion.dir),
       parroquiaValue: String(suggestion.parroquia),
       informationValue: suggestion,
-    });
-    this.props.locate(suggestion)
+    },
+      this.props.locate(suggestion)
+    );
     event.preventDefault();
-    event.stopPropagation();
+    // event.stopPropagation();
   };
 
   onparroquiaSuggestionsFetchRequested = ({ value }) => {
@@ -221,10 +223,15 @@ class CajaTxt extends React.Component {
       direccionValue: String(suggestion.dir),
       cell_idValue: String(suggestion.cell_id),
       informationValue: suggestion,
-    });
-    this.props.locate(this.state.informationValue)
+    },
+      // this.props.locate(this.state.informationValue)
+      (()=>{
+        this.props.locate(suggestion);
+        this.setState({isNewEnterKey:true})
+      })()
+    );
     event.preventDefault();
-    event.stopPropagation();
+    // event.stopPropagation();
   };
 
   ondireccionSuggestionsFetchRequested = ({ value }) => {
@@ -246,21 +253,26 @@ class CajaTxt extends React.Component {
       parroquiaValue: String(suggestion.parroquia),
       informationValue: suggestion,
 
-    });
-    this.props.locate(this.state.informationValue)
+    },
+      this.props.locate(suggestion)
+    );
     event.preventDefault();
-    event.stopPropagation();
+    // event.stopPropagation();
   };
 
   onKeyDown(event) {
-      if (event.key === 'Enter') {
-        this.props.value(event.target.value);
-        // alert('ENTER',event.target.value)
-        // this.onSuggestionsClearRequested();
-        this.props.locate(this.state.informationValue)
-        event.preventDefault();
-        event.stopPropagation();
-      }
+    if (event.key === 'Enter' && this.state.isNewEnterKey===false) {
+      // this.props.value(event.target.value);
+      // alert('ENTER',event.target.value)
+      // this.onSuggestionsClearRequested();
+      // console.log('key',this.getSuggestions())
+      // console.log('tesa','DOS', this.state.value,this.state.informationValue)
+      this.props.locate(this.state.informationValue)
+      // this.setState({isNewEnterKey:true})     
+      event.preventDefault();
+      // event.stopPropagation();
+    }
+    this.setState({isNewEnterKey: false})
     }
     handleClick=()=>{
       alert('Se logro el click')
@@ -282,25 +294,25 @@ class CajaTxt extends React.Component {
       placeholder: "Cuenca",
       value: estValue,
       onChange: this.onestChange,
-      onKeyDown: this.onKeyDown,
+      // onKeyDown: this.onKeyDown,
     };
     const cell_idInputProps = {
       placeholder: "12345",
       value: cell_idValue,
       onChange: this.oncell_idChange,
-      onKeyDown: this.onKeyDown,
+      // onKeyDown: this.onKeyDown,
     };
     const direccionInputProps = {
       placeholder: "Cuenca Centro",
       value: direccionValue,
       onChange: this.ondireccionChange,
-      onKeyDown: this.onKeyDown,
+      // onKeyDown: this.onKeyDown,
     };
     const parroquiaInputProps = {
       placeholder: "El Rosario",
       value: parroquiaValue,
       onChange: this.onparroquiaChange,
-      onKeyDown: this.onKeyDown,
+      // onKeyDown: this.onKeyDown,
     };
 
     return(
@@ -356,5 +368,5 @@ class CajaTxt extends React.Component {
 }
 
 export {
-  CajaTxt
+  SearchFields
 }

@@ -393,11 +393,13 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps,prevState){
+    console.log('heta',prevState.data,this.props.locate)
     if((this.state.changedata===null) && (prevState.data!==this.props.locate)){
       // console.log('El fly 1 ', this.state.data)
       //console.log('datsa', this.props,this.props.optionsButtons)
       try {
         // this.map.flyTo(L.latLng(this.state.data.coordinates[1], this.state.data.coordinates[0]), 18);
+        console.log('data Fly',this.state.data)
         this.map.flyTo(L.latLng(this.state.data.lat_dec, this.state.data.long_dec), 18);
       } catch (err) {
         // console.log(err)

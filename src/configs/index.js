@@ -9,13 +9,15 @@ var otecelOBjSuggest=[];
 var conecelOBjSuggest=[];
 var cntOBjSuggest=[];
 class DataStorage{
-  // constructor(){
+  constructor(API_URL='http://192.168.1.102:3000'){
     // this.conecelObj=conecelObj;
     // this.otecelObj=otecelObj;
     // this.cntObj=cntObj;
-  // }
+    this.API_URL=API_URL;
+  }
   fetchRadioBases=async(isStorage)=>{
-    return isStorage?fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+    // return isStorage?fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+    return isStorage?fetch(`${this.API_URL}/mapa/data_radiobase`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -29,7 +31,8 @@ class DataStorage{
   fetchRadioBasesFilter=async(optionsButtons, isStorage)=>{
     return isStorage?
     this.indexedDBFetchingFilter(optionsButtons,this.getObjectConvert)
-    :fetch('http://192.168.1.102:3000/mapa/filter_radiobase', {
+    // :fetch('http://192.168.1.102:3000/mapa/filter_radiobase', {
+      :fetch(`${this.API_URL}/mapa/filter_radiobase`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -44,7 +47,8 @@ class DataStorage{
     this.indexedDBFetchingSuggest(infoSearch, optionsButtons, field,this.similarity, this.editDistance)//.then(info=>console.log('estess',info))
     // return fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?nom_sit=${newValue}`,
     :
-    fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?${field}=${infoSearch}`,
+    // fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?${field}=${infoSearch}`,
+    fetch(`${this.API_URL}/radioBases/StatusBaseStation?${field}=${infoSearch}`,
       {
         method: 'POST',
         headers:{
@@ -366,6 +370,7 @@ class DataStorage{
         otecel_: "++id,nom_sit,cell_id,dir,parroquia,tecnologia, operadora, [tecnologia+operadora]",
         cnt_: "++id,nom_sit,cell_id,dir,parroquia,tecnologia, operadora, [tecnologia+operadora]",
     });
+    const API_URL=this.API_URL;
     db.on('ready', function () {
         return db.conecel_.count(function (count) {
             if (count > 0) {
@@ -373,7 +378,8 @@ class DataStorage{
             } else {
                 console.log("Database is empty. Iniciando peticion al servidor...");
                 return new Promise(function (resolve, reject) {
-                  fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+                  // fetch('http://192.168.1.102:3000/mapa/data_radiobase', {
+                  fetch(`${API_URL}/mapa/data_radiobase`, {
                     method: 'GET',
                     headers: {
                       'Content-Type': 'application/json'

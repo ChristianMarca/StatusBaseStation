@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Map from './mapa';
 import 'tachyons'
-import {CajaTxt} from '../search/loc';
+import {SearchFields} from '../search/loc';
 import styled from "styled-components"
 import {slide as Menu} from 'react-burger-menu';
 import {Navbar} from '../Navbar';
@@ -12,7 +12,7 @@ import './map.css'
 
 import Advisement from "../advisements/advisement";
 
-class Mapaj extends Component {
+class MapContainer extends Component {
 
   constructor(props, context) {
     super(props, context);
@@ -261,7 +261,7 @@ class Mapaj extends Component {
                           <Menu isOpen={this.state.menuOpen} onStateChange={(state) => this.handleStateChange(state)} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} width={350}>
                             <div className="panel">
                                 <h3 className="panelTitle">Search</h3>
-                                <CajaTxt className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate} dataSelected={this.state.optionAcept}/>
+                                <SearchFields className='menu' value={this.changeName} menuList={this.state.menuList} locate={this.locate} dataSelected={this.state.optionAcept}/>
                             </div>
                                 <h3 className="panelTitle">Operadora</h3>
                                 <div className='cf dib GroupButtons'>
@@ -298,4 +298,4 @@ class Mapaj extends Component {
           }
         }
 
-        export default Mapaj;
+        export default MapContainer;
