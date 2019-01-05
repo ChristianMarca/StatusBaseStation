@@ -144,7 +144,7 @@ class MapContainer extends Component {
           }
           locate = (data) => {
             this.setState({locate: data})
-            console.log('locate', data)
+            // console.log('locate', data)
           }
           changeName = (value) => {
             // const h=new Side();

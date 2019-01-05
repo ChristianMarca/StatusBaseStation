@@ -92,8 +92,13 @@ class SearchFields extends React.Component {
   onestChange = (event, { newValue }) => {
     // console.log(this.props.dataSelected,'thistadas')
     const DataStorageSuggestNom_Sit= new DataStorage();
+    let filterOptions=this.props.dataSelected;
+    if((filterOptions.includes('LTE') || filterOptions.includes('UMTS'))&&filterOptions.length){
+      !filterOptions.includes('UMTS/LTE')&&filterOptions.push('UMTS/LTE')
+    }
     newValue.length>=2 && 
-      DataStorageSuggestNom_Sit.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"nom_sit",window.localStorage.getItem('acceptAdvisement'))
+      // DataStorageSuggestNom_Sit.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"nom_sit",window.localStorage.getItem('acceptAdvisement'))
+      DataStorageSuggestNom_Sit.fetchRadioBasesSuggest(newValue,filterOptions,"nom_sit",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
       !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
     })
@@ -108,8 +113,13 @@ class SearchFields extends React.Component {
     const DataStorageSuggestCell_Id= new DataStorage();
     // newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?cell_id=${newValue}`)
     // .then(resp=>resp.json())
+    let filterOptions=this.props.dataSelected;
+    if((filterOptions.includes('LTE') || filterOptions.includes('UMTS'))&&filterOptions.length){
+      !filterOptions.includes('UMTS/LTE')&&filterOptions.push('UMTS/LTE')
+    }
     newValue.length>=2 && 
-      DataStorageSuggestCell_Id.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"cell_id",window.localStorage.getItem('acceptAdvisement'))
+      // DataStorageSuggestCell_Id.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"cell_id",window.localStorage.getItem('acceptAdvisement'))
+      DataStorageSuggestCell_Id.fetchRadioBasesSuggest(newValue,filterOptions,"cell_id",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
       //this.setState({RadioBases: resp.data})
       !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
@@ -125,8 +135,13 @@ class SearchFields extends React.Component {
     const DataStorageSuggestDir= new DataStorage();
     // newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?dir=${newValue}`)
     // .then(resp=>resp.json())
+    let filterOptions=this.props.dataSelected;
+    if((filterOptions.includes('LTE') || filterOptions.includes('UMTS'))&&filterOptions.length){
+      !filterOptions.includes('UMTS/LTE')&&filterOptions.push('UMTS/LTE')
+    }
     newValue.length>=2 && 
-      DataStorageSuggestDir.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"dir",window.localStorage.getItem('acceptAdvisement'))
+      // DataStorageSuggestDir.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"dir",window.localStorage.getItem('acceptAdvisement'))
+      DataStorageSuggestDir.fetchRadioBasesSuggest(newValue,filterOptions,"dir",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
       //this.setState({RadioBases: resp})
       !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
@@ -142,8 +157,13 @@ class SearchFields extends React.Component {
     const DataStorageSuggest= new DataStorage();
     // newValue.length>=2 && fetch(`http://192.168.1.102:3000/radioBases/StatusBaseStation?parroquia=${newValue}`)
     // .then(resp=>resp.json())
+    let filterOptions=this.props.dataSelected;
+    if((filterOptions.includes('LTE') || filterOptions.includes('UMTS'))&&filterOptions.length){
+      !filterOptions.includes('UMTS/LTE')&&filterOptions.push('UMTS/LTE')
+    }
     newValue.length>=2 && 
-      DataStorageSuggest.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"parroquia",window.localStorage.getItem('acceptAdvisement'))
+      // DataStorageSuggest.fetchRadioBasesSuggest(newValue,this.props.dataSelected,"parroquia",window.localStorage.getItem('acceptAdvisement'))
+      DataStorageSuggest.fetchRadioBasesSuggest(newValue,filterOptions,"parroquia",window.localStorage.getItem('acceptAdvisement'))
     .then(resp=>{
         !(resp==='Not Found')?this.setState({RadioBases: resp}):this.setState({RadioBases: []})
     })

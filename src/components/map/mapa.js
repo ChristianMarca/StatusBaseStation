@@ -266,7 +266,7 @@ class Map extends React.Component {
   }
   locate = (data) => {
     this.setState({data: data})
-    console.log('El Fly',data)
+    // console.log('El Fly',data)
     try {
       this.map.flyTo(L.latLng(data.coordinates[1], data.coordinates[0]), 18);
     } catch (err) {
@@ -304,9 +304,13 @@ class Map extends React.Component {
         markerConecel.clearLayers();
         markerOtecel.clearLayers();
         markerCNT.clearLayers();
+        let filterOptions=this.props.optionsButtons;
+        if(filterOptions.includes('LTE') || filterOptions.includes('UMTS')){
+          filterOptions.push('UMTS/LTE')
+        }
         const DataStorageFilter= new DataStorage();
         window.localStorage.getItem('acceptAdvisement')?
-        DataStorageFilter.fetchRadioBasesFilter(this.props.optionsButtons,window.localStorage.getItem('acceptAdvisement'))
+        DataStorageFilter.fetchRadioBasesFilter(filterOptions,window.localStorage.getItem('acceptAdvisement'))
         .then((myData) => {
           markerConecel.addLayer(this.clusterFunction(myData.conecel));
           this.map.addLayer(markerConecel);
@@ -393,13 +397,13 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps,prevState){
-    console.log('heta',prevState.data,this.props.locate)
+    // console.log('heta',prevState.data,this.props.locate)
     if((this.state.changedata===null) && (prevState.data!==this.props.locate)){
       // console.log('El fly 1 ', this.state.data)
       //console.log('datsa', this.props,this.props.optionsButtons)
       try {
         // this.map.flyTo(L.latLng(this.state.data.coordinates[1], this.state.data.coordinates[0]), 18);
-        console.log('data Fly',this.state.data)
+        // console.log('data Fly',this.state.data)
         this.map.flyTo(L.latLng(this.state.data.lat_dec, this.state.data.long_dec), 18);
       } catch (err) {
         // console.log(err)
