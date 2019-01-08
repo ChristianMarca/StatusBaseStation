@@ -4,13 +4,13 @@ import MapContainer from './components/map';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="container">
-          <MapContainer />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="container">
+				<MapContainer />
+			</div>
+		);
+	}
 }
 
 export default App;
