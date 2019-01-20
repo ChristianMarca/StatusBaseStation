@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/christianmarca.github.io/StatusBaseStation/precache-manifest.a7f98ac9cba8b5e6fcc91ec33c0beca3.js"
+  "/christianmarca.github.io/statusbasestation/precache-manifest.1b9d51d23073131f633c339748bb5816.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/christianmarca.github.io/StatusBaseStation/index.html", {
+workbox.routing.registerNavigationRoute("/christianmarca.github.io/statusbasestation/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
