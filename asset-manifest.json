@@ -1,15 +1,15 @@
 {
-  "main.css": "//StatusBaseStation/static/css/main.dcd4d71b.chunk.css",
-  "main.js": "//StatusBaseStation/static/js/main.d6865d47.chunk.js",
-  "main.js.map": "//StatusBaseStation/static/js/main.d6865d47.chunk.js.map",
-  "static/css/1.6b0fef73.chunk.css": "//StatusBaseStation/static/css/1.6b0fef73.chunk.css",
-  "static/js/1.7f592e45.chunk.js": "//StatusBaseStation/static/js/1.7f592e45.chunk.js",
-  "static/js/1.7f592e45.chunk.js.map": "//StatusBaseStation/static/js/1.7f592e45.chunk.js.map",
-  "runtime~main.js": "//StatusBaseStation/static/js/runtime~main.20a018c4.js",
-  "runtime~main.js.map": "//StatusBaseStation/static/js/runtime~main.20a018c4.js.map",
-  "static/css/main.dcd4d71b.chunk.css.map": "//StatusBaseStation/static/css/main.dcd4d71b.chunk.css.map",
-  "static/css/1.6b0fef73.chunk.css.map": "//StatusBaseStation/static/css/1.6b0fef73.chunk.css.map",
-  "index.html": "//StatusBaseStation/index.html",
-  "precache-manifest.117bc6f456dab16740dcac1415ba7f31.js": "//StatusBaseStation/precache-manifest.117bc6f456dab16740dcac1415ba7f31.js",
-  "service-worker.js": "//StatusBaseStation/service-worker.js"
+  "main.css": "/christianmarca.github.io/StatusBaseStation/static/css/main.dcd4d71b.chunk.css",
+  "main.js": "/christianmarca.github.io/StatusBaseStation/static/js/main.8858d0ca.chunk.js",
+  "main.js.map": "/christianmarca.github.io/StatusBaseStation/static/js/main.8858d0ca.chunk.js.map",
+  "static/css/1.6b0fef73.chunk.css": "/christianmarca.github.io/StatusBaseStation/static/css/1.6b0fef73.chunk.css",
+  "static/js/1.54727450.chunk.js": "/christianmarca.github.io/StatusBaseStation/static/js/1.54727450.chunk.js",
+  "static/js/1.54727450.chunk.js.map": "/christianmarca.github.io/StatusBaseStation/static/js/1.54727450.chunk.js.map",
+  "runtime~main.js": "/christianmarca.github.io/StatusBaseStation/static/js/runtime~main.f429c50e.js",
+  "runtime~main.js.map": "/christianmarca.github.io/StatusBaseStation/static/js/runtime~main.f429c50e.js.map",
+  "static/css/main.dcd4d71b.chunk.css.map": "/christianmarca.github.io/StatusBaseStation/static/css/main.dcd4d71b.chunk.css.map",
+  "static/css/1.6b0fef73.chunk.css.map": "/christianmarca.github.io/StatusBaseStation/static/css/1.6b0fef73.chunk.css.map",
+  "index.html": "/christianmarca.github.io/StatusBaseStation/index.html",
+  "precache-manifest.a7f98ac9cba8b5e6fcc91ec33c0beca3.js": "/christianmarca.github.io/StatusBaseStation/precache-manifest.a7f98ac9cba8b5e6fcc91ec33c0beca3.js",
+  "service-worker.js": "/christianmarca.github.io/StatusBaseStation/service-worker.js"
 }
