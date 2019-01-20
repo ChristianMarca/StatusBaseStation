@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "//statusbasestation/precache-manifest.b24c76005efec6e2f3ba97a2c0a0d7fc.js"
+  "//StatusBaseStation/precache-manifest.117bc6f456dab16740dcac1415ba7f31.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("//statusbasestation/index.html", {
+workbox.routing.registerNavigationRoute("//StatusBaseStation/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
