@@ -9,7 +9,7 @@ var otecelOBjSuggest = [];
 var conecelOBjSuggest = [];
 var cntOBjSuggest = [];
 class DataStorage {
-	constructor(API_URL = 'https://smaapi.herokuapp.com/') {
+	constructor(API_URL = 'https://smaapi.herokuapp.com') {
 		// this.conecelObj=conecelObj;
 		// this.otecelObj=otecelObj;
 		// this.cntObj=cntObj;
