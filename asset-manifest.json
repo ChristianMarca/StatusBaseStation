@@ -1,7 +1,7 @@
 {
   "main.css": "/StatusBaseStation/static/css/main.dcd4d71b.chunk.css",
-  "main.js": "/StatusBaseStation/static/js/main.e1dc3348.chunk.js",
-  "main.js.map": "/StatusBaseStation/static/js/main.e1dc3348.chunk.js.map",
+  "main.js": "/StatusBaseStation/static/js/main.7b616f5a.chunk.js",
+  "main.js.map": "/StatusBaseStation/static/js/main.7b616f5a.chunk.js.map",
   "static/css/1.6b0fef73.chunk.css": "/StatusBaseStation/static/css/1.6b0fef73.chunk.css",
   "static/js/1.db847f07.chunk.js": "/StatusBaseStation/static/js/1.db847f07.chunk.js",
   "static/js/1.db847f07.chunk.js.map": "/StatusBaseStation/static/js/1.db847f07.chunk.js.map",
@@ -10,6 +10,6 @@
   "static/css/main.dcd4d71b.chunk.css.map": "/StatusBaseStation/static/css/main.dcd4d71b.chunk.css.map",
   "static/css/1.6b0fef73.chunk.css.map": "/StatusBaseStation/static/css/1.6b0fef73.chunk.css.map",
   "index.html": "/StatusBaseStation/index.html",
-  "precache-manifest.4820af87928698ef0978154e3f62f0b4.js": "/StatusBaseStation/precache-manifest.4820af87928698ef0978154e3f62f0b4.js",
+  "precache-manifest.4ae8ed37de13e5255c18f928da5ebcff.js": "/StatusBaseStation/precache-manifest.4ae8ed37de13e5255c18f928da5ebcff.js",
   "service-worker.js": "/StatusBaseStation/service-worker.js"
 }

@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "e1dc33480b9f83532435",
+    "revision": "7b616f5aaa633391c415",
     "url": "/StatusBaseStation/static/css/main.dcd4d71b.chunk.css"
   },
   {
-    "revision": "e1dc33480b9f83532435",
-    "url": "/StatusBaseStation/static/js/main.e1dc3348.chunk.js"
+    "revision": "7b616f5aaa633391c415",
+    "url": "/StatusBaseStation/static/js/main.7b616f5a.chunk.js"
   },
   {
     "revision": "db847f076a3a8bb6e50a",
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/StatusBaseStation/static/js/runtime~main.1a424e7e.js"
   },
   {
-    "revision": "27eb73986611a31bf5da1fe6a136c8e4",
+    "revision": "5125e0859aae9a423de843c271969181",
     "url": "/StatusBaseStation/index.html"
   }
 ];
