@@ -144,13 +144,13 @@ class Side extends React.Component {
 		var path = '';
 		switch (this.getOperadora()) {
 			case 'CONECEL':
-				path = '../../../logoOp/claro-logo.png';
+				path = 'logoOp/claro-logo.png';
 				break;
 			case 'OTECEL':
-				path = '../../../logoOp/movistar-logo.png';
+				path = 'logoOp/movistar-logo.png';
 				break;
 			case 'CNT':
-				path = '../../../logoOp/cnt-logo.png';
+				path = 'logoOp/cnt-logo.png';
 				break;
 			default:
 				break;
