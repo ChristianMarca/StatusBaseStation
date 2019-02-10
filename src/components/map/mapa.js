@@ -204,7 +204,7 @@ class Map extends React.Component {
 							callback: this.clickMenuRight
 						}
 					: {
-							text: 'BSs',
+							text: 'SMA_APP',
 							index: 3,
 							icon:
 								'https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_19-512.png',
@@ -308,7 +308,7 @@ class Map extends React.Component {
 	};
 
 	clickGoTo = () => {
-		var win = window.open('https://github.com/ChristianMarca', '_blank');
+		var win = window.open('https://christianmarca.github.io/sma_app', '_blank');
 		win.focus();
 	};
 
